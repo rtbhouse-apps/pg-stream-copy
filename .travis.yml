@@ -9,13 +9,18 @@ addons:
   postgresql: "12"
 env:
   - DB_DSN=postgres
+
 script:
   - pytest --cov=pg_batch_inserter tests/unit
   - mypy .
   - pyflakes .
+
 deploy:
   provider: pypi
   user: FIXME
   password: FIXME
   on:
     tags: true
+
+after_success:
+  - codecov
