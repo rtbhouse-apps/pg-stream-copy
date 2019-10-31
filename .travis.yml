@@ -4,7 +4,9 @@ python:
 install:
   - pip install .[dev,test]
 script:
-  - pytest tests/unit
+  - pytest --cov=pg_batch_inserter tests/unit
+  - mypy .
+  - pyflakes .
 deploy:
   provider: pypi
   user: FIXME
