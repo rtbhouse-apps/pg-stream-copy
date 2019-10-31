@@ -1,0 +1,13 @@
+language: python
+python:
+  - "3.8"
+install:
+  - pip install .[dev,test]
+script:
+  - pytest tests/unit
+deploy:
+  provider: pypi
+  user: FIXME
+  password: FIXME
+  on:
+    tags: true
