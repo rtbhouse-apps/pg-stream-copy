@@ -3,6 +3,12 @@ python:
   - "3.8"
 install:
   - pip install .[dev,test]
+services:
+  - postgresql
+addons:
+  postgresql: "11"
+env:
+  - DB_DSN=postgres
 script:
   - pytest --cov=pg_batch_inserter tests/unit
   - mypy .
