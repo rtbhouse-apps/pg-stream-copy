@@ -1,16 +1,14 @@
 language: python
 python:
   - "3.8"
+
+env:
+  - DB_DSN=postgresql://postgres@localhost:5432/postgres
 install:
   - pip install .[dev,e2e,ci]
-env:
-  - DB_DSN=postgresql://postgres@localhost:5432/e2e_db
 
 services:
   - postgresql
-
-before_script:
-  - psql -c 'CREATE DATABASE e2e_db;' -U postgres
 
 script:
   - pytest --cov=pg_stream_copy tests
