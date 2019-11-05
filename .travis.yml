@@ -3,12 +3,20 @@ python:
   - "3.8"
 
 env:
-  - DB_DSN=postgresql://postgres@localhost:5432/postgres
+  - DB_DSN=postgresql://postgres@localhost:5432/e2e_db
 install:
   - pip install .[dev,e2e,ci]
 
 services:
   - postgresql
+addons:
+  postgresql: "11"
+  apt:
+    packages:
+      - postgresql-11
+
+before_script:
+  - psql -c 'CREATE DATABASE e2e_db;' -U postgres
 
 script:
   - pytest --cov=pg_stream_copy tests
