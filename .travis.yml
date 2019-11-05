@@ -6,7 +6,6 @@ env:
   # - PG_VERSION=10
   - PG_VERSION=11
   - PG_VERSION=12
-  - DB_DSN=postgresql://postgres@localhost:5432/e2e_db
 install:
   - pip install .[dev,e2e,ci]
 
@@ -17,6 +16,8 @@ jobs:
         - postgresql
       addons:
         postgresql: $PG_VERSION
+      env:
+        - DB_DSN=postgresql://postgres@localhost:5432/e2e_db
       before_install:
         - sudo apt-get update
         - sudo apt-get --yes remove postgresql\*
@@ -32,6 +33,7 @@ jobs:
       after_success:
         - codecov
     - stage: deploy
+      script: skip
       deploy:
         provider: pypi
         user: FIXME
