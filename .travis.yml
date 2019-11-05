@@ -26,12 +26,13 @@ jobs:
         - sudo service postgresql restart $PG_VERSION
       before_script:
         - psql -c 'CREATE DATABASE e2e_db;' -U postgres
-      script:
-        - pytest --cov=pg_stream_copy tests
-        - mypy .
-        - pyflakes .
+      script: pytest --cov=pg_stream_copy tests/
       after_success:
         - codecov
+    - stage: mypy
+      script: mypy .
+    - stage: pyflakes
+      script: pyflakes .
     - stage: deploy
       script: skip
       deploy:
