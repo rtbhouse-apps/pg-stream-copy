@@ -3,15 +3,16 @@ python:
   - "3.8"
 install:
   - pip install .[dev,test,ci]
+env:
+  - DB_DSN=postgresql://postgres@localhost
+
 services:
   - postgresql
 addons:
   postgresql: "12"
-env:
-  - DB_DSN=postgres
 
 script:
-  - pytest --cov=pg_stream_copy tests/unit
+  - pytest --cov=pg_stream_copy tests
   - mypy .
   - pyflakes .
 

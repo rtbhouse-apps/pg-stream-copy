@@ -1,28 +1,23 @@
-version: "3"
+version: "3.2"
 
 services:
-  postgres10:
-    image: postgres:10-alpine
-    environment:
-      POSTGRES_PASSWORD: postgres
-
-  postgres11:
+  db:
     image: postgres:11-alpine
     environment:
       POSTGRES_PASSWORD: postgres
 
-  postgres12:
-    image: postgres:12-alpine
-    environment:
-      POSTGRES_PASSWORD: postgres
-
-  e2e:
+  dev:
     build:
       context: .
       dockerfile: dev.Dockerfile
+    container_name: pg_stream_copy_dev
+    environment:
+      DB_DSN: postgresql://postgres:postgres@db
     depends_on:
-      - postgres10
-      - postgres11
-      - postgres12
+      - db
     volumes:
-      - ./:/code
+      - pip-cache:/home/python/.local/
+      - ./:/home/python/code
+
+volumes:
+  pip-cache:

@@ -9,4 +9,7 @@ RUN groupadd -g $GID -o $UNAME \
   && useradd -m -u $UID -g $GID -o -s /bin/bash $UNAME
 
 USER $UNAME
-WORKDIR /code
+WORKDIR /home/$UNAME/code
+
+RUN mkdir /home/$UNAME/.local/
+VOLUME /home/$UNAME/.local/

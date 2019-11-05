@@ -1,20 +1,8 @@
 from pg_stream_copy import ColumnDefinition, DataType, Schema
 
 
-def test_from_table_schema_1_10(psycopg2_rollback_cursor_10):
-    _test_from_table_schema_1(psycopg2_rollback_cursor_10)
-
-
-def test_from_table_schema_1_11(psycopg2_rollback_cursor_11):
-    _test_from_table_schema_1(psycopg2_rollback_cursor_11)
-
-
-def test_from_table_schema_1_12(psycopg2_rollback_cursor_12):
-    _test_from_table_schema_1(psycopg2_rollback_cursor_12)
-
-
-def _test_from_table_schema_1(psycopg2_rollback_cursor):
-    psycopg2_rollback_cursor.execute('''
+def test_from_table_schema(psycopg_cursor):
+    psycopg_cursor.execute('''
         CREATE TABLE public.test_schema_test_from_table_schema_1 (
             _smallint SMALLINT NULL,
             _integer INTEGER NULL,
@@ -26,7 +14,7 @@ def _test_from_table_schema_1(psycopg2_rollback_cursor):
     ''')
 
     schema = Schema.load_from_table(
-        psycopg2_rollback_cursor,
+        psycopg_cursor,
         "public.test_schema_test_from_table_schema_1",
     )
 
