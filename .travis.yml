@@ -1,22 +1,24 @@
 language: python
 python:
-  - "3.8"
+  - "3.7"
 
 env:
   - DB_DSN=postgresql://postgres@localhost:5432/e2e_db
 install:
   - pip install .[dev,e2e,ci]
 
+before_install:
+  - sudo apt-get update
+  - sudo apt-get --yes remove postgresql\*
+  - sudo apt-get install -y postgresql-11 postgresql-client-11
+  - sudo cp /etc/postgresql/{9.6,11}/main/pg_hba.conf
+  - sudo service postgresql restart 11
+before_script:
+  - psql -c 'CREATE DATABASE e2e_db;' -U postgres
 services:
   - postgresql
 addons:
-  postgresql: "11"
-  apt:
-    packages:
-      - postgresql-11
-
-before_script:
-  - psql -c 'CREATE DATABASE e2e_db;' -U postgres
+  postgresql: "11.2"
 
 script:
   - pytest --cov=pg_stream_copy tests
