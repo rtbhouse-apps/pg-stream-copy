@@ -1,38 +1,49 @@
 language: python
 
-jobs:
+matrix:
   include:
     - python: "3.7"
-      env: PG_VERSION=11
+      env:
+        - PG_VERSION=11
+        - DB_DSN=postgresql://postgres@localhost:5432/e2e_db
+    - python: "3.7"
+      env:
+        - PG_VERSION=12
+        - DB_DSN=postgresql://postgres@localhost:5432/e2e_db
     - python: "3.8"
-      env: PG_VERSION=12
+      env:
+        - PG_VERSION=11
+        - DB_DSN=postgresql://postgres@localhost:5432/e2e_db
+    - python: "3.8"
+      env:
+        - PG_VERSION=12
+        - DB_DSN=postgresql://postgres@localhost:5432/e2e_db
 
-
-services:
-  - postgresql
-addons:
-  postgresql: $PG_VERSION
-env:
-  - DB_DSN=postgresql://postgres@localhost:5432/e2e_db
-before_install:
-  - sudo apt-get update
-  - sudo apt-get --yes remove postgresql\*
-  - sudo apt-get install -y postgresql-${PG_VERSION} postgresql-client-${PG_VERSION}
-  - sudo cp /etc/postgresql/{9.6,$PG_VERSION}/main/pg_hba.conf
-  - sudo service postgresql restart $PG_VERSION
-install:
-  - pip install .[dev,e2e,ci]
-before_script:
-  - psql -c 'CREATE DATABASE e2e_db;' -U postgres
-script:
-  - pytest --cov=pg_stream_copy tests/
-  - mypy .
-  - pyflakes .
-after_success:
-  - codecov
-deploy:
-  provider: pypi
-  user: FIXME
-  password: FIXME
-  on:
-    tags: true
+jobs:
+  include:
+    - stage: test
+      services:
+        - postgresql
+      addons:
+        postgresql: $PG_VERSION
+      before_install:
+        - sudo apt-get update
+        - sudo apt-get --yes remove postgresql\*
+        - sudo apt-get install -y postgresql-${PG_VERSION} postgresql-client-${PG_VERSION}
+        - sudo cp /etc/postgresql/{9.6,$PG_VERSION}/main/pg_hba.conf
+        - sudo service postgresql restart $PG_VERSION
+      install:
+        - pip install .[dev,e2e,ci]
+      before_script:
+        - psql -c 'CREATE DATABASE e2e_db;' -U postgres
+      script: pytest --cov=pg_stream_copy tests/
+        # - mypy .
+        # - pyflakes .
+      after_success:
+        - codecov
+# deploy:
+#   provider: pypi
+#   user: FIXME
+#   password: FIXME
+#   on:
+#     tags: true
