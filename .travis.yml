@@ -1,36 +1,40 @@
 language: python
 python:
   - "3.7"
-
+  - "3.8"
 env:
+  # - PG_VERSION=10
+  - PG_VERSION=11
+  - PG_VERSION=12
   - DB_DSN=postgresql://postgres@localhost:5432/e2e_db
 install:
   - pip install .[dev,e2e,ci]
 
-before_install:
-  - sudo apt-get update
-  - sudo apt-get --yes remove postgresql\*
-  - sudo apt-get install -y postgresql-12 postgresql-client-12
-  - sudo cp /etc/postgresql/{9.6,12}/main/pg_hba.conf
-  - sudo service postgresql restart 12
-before_script:
-  - psql -c 'CREATE DATABASE e2e_db;' -U postgres
-services:
-  - postgresql
-addons:
-  postgresql: "12"
-
-script:
-  - pytest --cov=pg_stream_copy tests
-  - mypy .
-  - pyflakes .
-
-deploy:
-  provider: pypi
-  user: FIXME
-  password: FIXME
-  on:
-    tags: true
-
-after_success:
-  - codecov
+jobs:
+  include:
+    - stage: test
+      services:
+        - postgresql
+      addons:
+        postgresql: $PG_VERSION
+      before_install:
+        - sudo apt-get update
+        - sudo apt-get --yes remove postgresql\*
+        - sudo apt-get install -y postgresql-${PG_VERSION} postgresql-client-${PG_VERSION}
+        - sudo cp /etc/postgresql/{9.6,$PG_VERSION}/main/pg_hba.conf
+        - sudo service postgresql restart $PG_VERSION
+      before_script:
+        - psql -c 'CREATE DATABASE e2e_db;' -U postgres
+      script:
+        - pytest --cov=pg_stream_copy tests
+        - mypy .
+        - pyflakes .
+      after_success:
+        - codecov
+    - stage: deploy
+      deploy:
+        provider: pypi
+        user: FIXME
+        password: FIXME
+        on:
+          tags: true

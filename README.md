@@ -1,2 +1,2 @@
 # PG Stream Copy
-https://travis-ci.org/rtbhouse-apps/rtbhouse-pg-bulk-inserter.svg?branch=master
+[![Build Status](https://travis-ci.com/rtbhouse-apps/pg-stream-copy.svg?branch=master)](https://travis-ci.com/rtbhouse-apps/pg-stream-copy)
