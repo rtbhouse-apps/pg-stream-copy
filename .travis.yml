@@ -7,6 +7,7 @@ jobs:
     - python: "3.8"
       env: PG_VERSION=12
 
+
 services:
   - postgresql
 addons:
