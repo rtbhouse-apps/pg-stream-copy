@@ -11,7 +11,7 @@ env:
   - DB_DSN=postgres
 
 script:
-  - pytest --cov=pg_batch_inserter tests/unit
+  - pytest --cov=pg_stream_copy tests/unit
   - mypy .
   - pyflakes .
 

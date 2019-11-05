@@ -1,6 +1,6 @@
 from datetime import date
 
-from pg_batch_inserter import ColumnDefinition, DataType, Schema
+from pg_stream_copy import ColumnDefinition, DataType, Schema
 
 set_1_schema = Schema([
     ColumnDefinition('SMALLINT', DataType.SMALLINT),

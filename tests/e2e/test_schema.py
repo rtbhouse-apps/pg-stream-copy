@@ -1,4 +1,4 @@
-from pg_batch_inserter import ColumnDefinition, DataType, Schema
+from pg_stream_copy import ColumnDefinition, DataType, Schema
 
 
 def test_from_table_schema_1_10(psycopg2_rollback_cursor_10):

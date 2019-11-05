@@ -1,6 +1,6 @@
 from unittest.mock import Mock
 
-from pg_batch_inserter.encoder import Encoder
+from pg_stream_copy.encoder import Encoder
 
 from . import data
 

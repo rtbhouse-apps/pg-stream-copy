@@ -1,6 +1,6 @@
 from datetime import date
 
-from pg_batch_inserter import protocol
+from pg_stream_copy import protocol
 
 
 def test_table():

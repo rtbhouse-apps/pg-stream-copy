@@ -19,8 +19,10 @@ services:
   e2e:
     build:
       context: .
-      dockerfile: e2e.Dockerfile
+      dockerfile: dev.Dockerfile
     depends_on:
       - postgres10
       - postgres11
       - postgres12
+    volumes:
+      - ./:/code

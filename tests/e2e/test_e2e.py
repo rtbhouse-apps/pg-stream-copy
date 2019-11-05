@@ -1,6 +1,6 @@
 from datetime import date
 
-from pg_batch_inserter import Encoder, Schema, Writer, WriterEncoder
+from pg_stream_copy import Encoder, Schema, Writer, WriterEncoder
 
 
 def test_e2e_1_10(psycopg2_rollback_cursor_10):
