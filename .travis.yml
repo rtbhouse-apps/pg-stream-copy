@@ -8,8 +8,6 @@ env:
 
 services:
   - postgresql
-addons:
-  postgresql: "11"
 
 before_script:
   - psql -c 'CREATE DATABASE e2e_db;' -U postgres
