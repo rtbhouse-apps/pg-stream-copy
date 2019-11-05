@@ -2,7 +2,7 @@ language: python
 python:
   - "3.8"
 install:
-  - pip install .[dev,test,ci]
+  - pip install .[dev,e2e,ci]
 env:
   - DB_DSN=postgresql://postgres@localhost
 
