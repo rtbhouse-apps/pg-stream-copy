@@ -1,4 +1,5 @@
 language: python
+python: "3.8"
 
 pytest: &pytest
   stage: test
@@ -58,7 +59,8 @@ jobs:
       script: skip
       deploy:
         provider: pypi
-        user: FIXME
-        password: FIXME
+        user: __token__
+        password:
+          secure: "qWtIFDsLZ2Z83FKd2pvO7ugUYZ/YDwSz+2sxSbAXOdwwga7eNby12B0x2CNhVJfkUWecXGaFPar/zyQvPLHCqqdI7ef+kJMJnVsD4zMROZFCOfrPFDgBGq6Yh4w6xicrVRtBLaNnYb4hOwSK/VzuF0gQSiqFXnjxSils28DoOGvPweql4XePRKu8JH79S35ieFGaIdEgK9LJsWSqaCICbe6TSf5/aymXxjiCNlevujFDf2J0FQgn/2a3sfVJqOZsvMRaGd4T166XrpFkG6c9xGqt97KPnV/U8GHWO+uZv9sP4G2m9iAMiQKBCjUJBmTH2YnilFK/U9E2pHx/I5FrMu/8t6U5xpzJPuatTmWYw+Q+89SOoeR10MwinoiKWLyor4chY6Fu5GPVZvYQb7mZpyL4GGSQTHrCiefpreTYqix3/rCrNOoxqiyD75ec2Hru7N9T8wkwxno/ZGgQUjYdcoPLFDDe01p+VnZ3Wiop9fjAko5cFgYtz8LKC6W60nR9brvnEwiKMcNvW8m/I7xaJe4fO/nnF7oPU7+d1Iwl0airFd/Qhd3LEdZL9MxL75VRMGY4Qv6C5KVaADflBZpBs/oKDEenifrtq93KqAibvJy8lQxe/zHmZCJJgUwHHb08+Fs8N1O0yT9ZvXDqBolzEXcDMi1W0Vo0vuXV7pKkWLs="
         on:
           tags: true
