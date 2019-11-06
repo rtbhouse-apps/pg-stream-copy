@@ -31,24 +31,16 @@ jobs:
   include:
     - <<: *pytest
       python: "3.7"
-      env:
-        - PG_VERSION=11
-        - DB_DSN=postgresql://postgres@localhost:5432/e2e_db
+      env: PG_VERSION=11
     - <<: *pytest
       python: "3.7"
-      env:
-        - PG_VERSION=12
-        - DB_DSN=postgresql://postgres@localhost:5432/e2e_db
+      env: PG_VERSION=12
     - <<: *pytest
       python: "3.8"
-      env:
-        - PG_VERSION=11
-        - DB_DSN=postgresql://postgres@localhost:5432/e2e_db
+      env: PG_VERSION=11
     - <<: *pytest
       python: "3.8"
-      env:
-        - PG_VERSION=12
-        - DB_DSN=postgresql://postgres@localhost:5432/e2e_db
+      env: PG_VERSION=12
 
     - <<: *linters
       python: "3.7"
