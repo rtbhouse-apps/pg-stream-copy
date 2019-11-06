@@ -20,11 +20,22 @@ pytest: &pytest
   after_success:
     - codecov
 
+linters: &linters
+  stage: linters
+  install:
+    - pip install .[dev]
+  script: mypy . && pyflakes .
+
 jobs:
   include:
     - <<: *pytest
       python: "3.7"
       env:
+        - PG_VERSION=10
+        - DB_DSN=postgresql://postgres@localhost:5432/e2e_db
+    - <<: *pytest
+      python: "3.7"
+      env:
         - PG_VERSION=11
         - DB_DSN=postgresql://postgres@localhost:5432/e2e_db
     - <<: *pytest
@@ -35,6 +46,11 @@ jobs:
     - <<: *pytest
       python: "3.8"
       env:
+        - PG_VERSION=10
+        - DB_DSN=postgresql://postgres@localhost:5432/e2e_db
+    - <<: *pytest
+      python: "3.8"
+      env:
         - PG_VERSION=11
         - DB_DSN=postgresql://postgres@localhost:5432/e2e_db
     - <<: *pytest
@@ -42,9 +58,17 @@ jobs:
       env:
         - PG_VERSION=12
         - DB_DSN=postgresql://postgres@localhost:5432/e2e_db
-# deploy:
-#   provider: pypi
-#   user: FIXME
-#   password: FIXME
-#   on:
-#     tags: true
+
+    - <<: *linters
+      python: "3.7"
+    - <<: *linters
+      python: "3.8"
+
+    - stage: deploy
+      script: skip
+      deploy:
+        provider: pypi
+        user: FIXME
+        password: FIXME
+        on:
+          tags: true
