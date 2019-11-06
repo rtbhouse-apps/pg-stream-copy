@@ -18,8 +18,6 @@ pytest: &pytest
   before_script:
     - psql -c 'CREATE DATABASE e2e_db;' -U postgres
   script: pytest --cov=pg_stream_copy tests/
-  after_success:
-    - codecov
 
 linters: &linters
   stage: linters
@@ -31,24 +29,18 @@ jobs:
   include:
     - <<: *pytest
       python: "3.7"
-      env:
-        - PG_VERSION=11
-        - DB_DSN=postgresql://postgres@localhost:5432/e2e_db
+      env: PG_VERSION=11
     - <<: *pytest
       python: "3.7"
-      env:
-        - PG_VERSION=12
-        - DB_DSN=postgresql://postgres@localhost:5432/e2e_db
+      env: PG_VERSION=12
     - <<: *pytest
       python: "3.8"
-      env:
-        - PG_VERSION=11
-        - DB_DSN=postgresql://postgres@localhost:5432/e2e_db
+      env: PG_VERSION=11
     - <<: *pytest
       python: "3.8"
-      env:
-        - PG_VERSION=12
-        - DB_DSN=postgresql://postgres@localhost:5432/e2e_db
+      env: PG_VERSION=12
+      after_success:
+        - codecov
 
     - <<: *linters
       python: "3.7"
