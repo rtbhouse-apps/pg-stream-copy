@@ -17,13 +17,21 @@ table_name = 'public.example_table'
 schema = Schema.load_from_table(cursor, table_name)
 with WriterEncoder(cursor, table_name, schema) as writer_encoder:
     writer_encoder.append_tuple((2, 3, 4, 2.34, "2", date(2019, 2, 1)))
-    writer_encoder.append_tuple((20, 30, 40, 23.4, "20", date(2019, 2, 2)))
-    writer_encoder.append_tuple((200, 300, 400, 234, "200", date(2019, 2, 3)))
+    writer_encoder.append_dict({
+        'col1': 200,
+        'col2': 300,
+        'col3': 400,
+        'col4': 234,
+        'col5': '200',
+        'col6': date(2019, 2, 3),
+    })
 
 cursor.commit()
 conn.close()
 
 ```
+
+More detailed example in tests: https://github.com/rtbhouse-apps/pg-stream-copy/blob/master/tests/e2e/test_e2e.py
 
 ### Supported PostgreSQL types:
 * smallint
