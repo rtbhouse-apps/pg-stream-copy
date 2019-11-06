@@ -19,6 +19,22 @@ pytest: &pytest
     - psql -c 'CREATE DATABASE e2e_db;' -U postgres
   script: pytest --cov=pg_stream_copy tests/
 
+pytest_pg10: &pytest_pg10
+  stage: test
+  services:
+    - postgresql
+  addons:
+    postgresql: "10"
+    apt:
+      packages:
+      - postgresql-10
+      - postgresql-client-10
+  install:
+    - pip install .[dev,e2e,ci]
+  before_script:
+    - psql -c 'CREATE DATABASE e2e_db;' -U postgres
+  script: pytest --cov=pg_stream_copy tests/
+
 linters: &linters
   stage: linters
   install:
@@ -27,6 +43,12 @@ linters: &linters
 
 jobs:
   include:
+    - <<: *pytest_pg10
+      python: "3.7"
+      env: PG_VERSION=10
+    - <<: *pytest_pg10
+      python: "3.8"
+      env: PG_VERSION=10
     - <<: *pytest
       python: "3.7"
       env: PG_VERSION=11
