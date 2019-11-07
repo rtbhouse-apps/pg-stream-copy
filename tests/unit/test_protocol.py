@@ -4,7 +4,8 @@ from pg_stream_copy import protocol
 
 
 def test_table():
-    assert protocol.build_table_header() + protocol.build_table_trailer() == b'PGCOPY\n\xff\r\n\x00\x00\x00\x00\x00\x00\x00\x00\x00\xff\xff'
+    assert protocol.build_table_header() + protocol.build_table_trailer() == \
+        b'PGCOPY\n\xff\r\n\x00\x00\x00\x00\x00\x00\x00\x00\x00\xff\xff'
 
 
 def test_row_1():

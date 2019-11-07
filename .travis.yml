@@ -39,7 +39,7 @@ linters: &linters
   stage: linters
   install:
     - pip install .[dev]
-  script: mypy . && pyflakes .
+  script: mypy . && pycodestyle .
 
 jobs:
   include:
