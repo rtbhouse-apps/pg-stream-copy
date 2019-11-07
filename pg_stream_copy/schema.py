@@ -17,7 +17,10 @@ class DataType(Enum):
     BIGINT = auto()  # int
     DOUBLE_PRECISION = auto()  # float
     CHARACTER_VARYING = auto()  # str
+    TEXT = auto()  # str
     DATE = auto()  # datetime.date
+    JSON = auto()  # str, eg. json.dumps({})
+    JSONB = auto()  # bytes, eg. bytes(json.dumps({}), 'utf-8')
 
 
 class ColumnDefinition(NamedTuple):
@@ -58,14 +61,19 @@ class Schema:
             'table_name': table_name,
         })
 
+        columns = [
+            ColumnDefinition(
+                name=row[0],
+                data_type=_pg_data_type_to_py[row[1]]
+            )
+            for row in psycopg2_cursor
+        ]
+
+        if not columns:
+            raise Exception("information_schema returned 0 rows for this table. Most likely the table was not found.")
+
         return Schema(
-            columns=[
-                ColumnDefinition(
-                    name=row[0],
-                    data_type=_pg_data_type_to_py[row[1]]
-                )
-                for row in psycopg2_cursor
-            ]
+            columns=columns
         )
 
 
@@ -75,5 +83,8 @@ _pg_data_type_to_py = {
     'bigint': DataType.BIGINT,
     'double precision': DataType.DOUBLE_PRECISION,
     'character varying': DataType.CHARACTER_VARYING,
+    'text': DataType.TEXT,
     'date': DataType.DATE,
+    'json': DataType.JSON,
+    'jsonb': DataType.JSONB,
 }

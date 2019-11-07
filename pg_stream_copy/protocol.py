@@ -60,6 +60,18 @@ def build_character_varying(value: str) -> bytes:
     return _build_value(bytes(value, 'utf-8'))
 
 
+def build_text(value: str) -> bytes:
+    return build_character_varying(value)
+
+
 def build_date(day: date) -> bytes:
     days = (day - pg_date_epoch).days
     return build_integer(days)
+
+
+def build_json(value: str) -> bytes:
+    return build_character_varying(value)
+
+
+def build_jsonb(value: bytes) -> bytes:
+    return _build_value(pack('>B', 1) + value)
