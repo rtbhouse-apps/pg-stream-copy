@@ -1,5 +1,8 @@
 # PG Stream Copy
-[![Build Status](https://travis-ci.com/rtbhouse-apps/pg-stream-copy.svg?branch=master)](https://travis-ci.com/rtbhouse-apps/pg-stream-copy) [![codecov](https://codecov.io/gh/rtbhouse-apps/pg-stream-copy/branch/master/graph/badge.svg)](https://codecov.io/gh/rtbhouse-apps/pg-stream-copy) ![PyPI](https://img.shields.io/pypi/v/pg-stream-copy) ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/pg-stream-copy)
+[![Build Status](https://travis-ci.com/rtbhouse-apps/pg-stream-copy.svg?branch=master)](https://travis-ci.com/rtbhouse-apps/pg-stream-copy)
+[![codecov](https://codecov.io/gh/rtbhouse-apps/pg-stream-copy/branch/master/graph/badge.svg)](https://codecov.io/gh/rtbhouse-apps/pg-stream-copy)
+[![PyPI](https://img.shields.io/pypi/v/pg-stream-copy)](https://pypi.org/project/pg-stream-copy/)
+[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/pg-stream-copy)](https://pypi.org/project/pg-stream-copy/)
 
 Fast COPY TO postgresql table directly from python by converting input data to bytes and stream to psycopg2 cursor using `COPY <table> FROM STDIN BINARY`
 
