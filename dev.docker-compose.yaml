@@ -1,0 +1,23 @@
+version: "3.2"
+
+services:
+  db:
+    image: postgres:12-alpine
+    environment:
+      POSTGRES_PASSWORD: postgres
+
+  dev:
+    build:
+      context: .
+      dockerfile: dev.Dockerfile
+    container_name: pg_stream_copy_dev
+    environment:
+      DB_DSN: postgresql://postgres:postgres@db
+    depends_on:
+      - db
+    volumes:
+      - pip-cache:/home/python/.local/
+      - ./:/home/python/code
+
+volumes:
+  pip-cache:

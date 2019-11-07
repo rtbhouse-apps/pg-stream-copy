@@ -1,4 +1,4 @@
-from pg_batch_inserter.writer import Writer
+from pg_stream_copy.writer import Writer
 
 from .mocks import MockPsycopg2CopyExpert
 

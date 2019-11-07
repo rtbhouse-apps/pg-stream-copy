@@ -1,22 +1,10 @@
 from datetime import date
 
-from pg_batch_inserter import Encoder, Schema, Writer, WriterEncoder
+from pg_stream_copy import Encoder, Schema, Writer, WriterEncoder
 
 
-def test_e2e_1_10(psycopg2_rollback_cursor_10):
-    _test_e2e_1(psycopg2_rollback_cursor_10)
-
-
-def test_e2e_1_11(psycopg2_rollback_cursor_11):
-    _test_e2e_1(psycopg2_rollback_cursor_11)
-
-
-def test_e2e_1_12(psycopg2_rollback_cursor_12):
-    _test_e2e_1(psycopg2_rollback_cursor_12)
-
-
-def _test_e2e_1(psycopg2_rollback_cursor):
-    psycopg2_rollback_cursor.execute('''
+def test_writer_encoder(psycopg_cursor):
+    psycopg_cursor.execute('''
         CREATE TABLE public.e2e_test_e2e_test_1 (
             _smallint SMALLINT NULL,
             _integer INTEGER NULL,
@@ -28,22 +16,22 @@ def _test_e2e_1(psycopg2_rollback_cursor):
     ''')
 
     schema = Schema.load_from_table(
-        psycopg2_rollback_cursor,
+        psycopg_cursor,
         "public.e2e_test_e2e_test_1",
     )
 
-    with Writer(psycopg2_rollback_cursor, "public.e2e_test_e2e_test_1") as writer:
+    with Writer(psycopg_cursor, "public.e2e_test_e2e_test_1") as writer:
         with Encoder(schema, writer) as encoder:
             encoder.append_tuple((1, 2, 3, 1.23, "1", date(2019, 1, 1)))
             encoder.append_tuple((10, 20, 30, 12.3, "10", date(2019, 1, 2)))
             encoder.append_tuple((100, 200, 300, 123, "100", date(2019, 1, 3)))
 
-    with WriterEncoder(psycopg2_rollback_cursor, "public.e2e_test_e2e_test_1", schema) as writer_encoder:
+    with WriterEncoder(psycopg_cursor, "public.e2e_test_e2e_test_1", schema) as writer_encoder:
         writer_encoder.append_tuple((2, 3, 4, 2.34, "2", date(2019, 2, 1)))
         writer_encoder.append_tuple((20, 30, 40, 23.4, "20", date(2019, 2, 2)))
         writer_encoder.append_tuple((200, 300, 400, 234, "200", date(2019, 2, 3)))
 
-    psycopg2_rollback_cursor.execute("""
+    psycopg_cursor.execute("""
         SELECT
             COUNT(*),
             SUM(_smallint),
@@ -55,7 +43,7 @@ def _test_e2e_1(psycopg2_rollback_cursor):
         FROM
             public.e2e_test_e2e_test_1
     """)
-    row = list(psycopg2_rollback_cursor)[0]
+    row = list(psycopg_cursor)[0]
     assert row == (
         6,
         333,
