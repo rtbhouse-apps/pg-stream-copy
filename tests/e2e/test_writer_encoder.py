@@ -48,7 +48,7 @@ def test_writer_encoder(psycopg_cursor):
         SELECT
             *
         FROM
-            public.
+            public.e2e_test_e2e_test_1
         ORDER BY
             _smallint
     """)
