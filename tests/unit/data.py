@@ -13,7 +13,17 @@ set_1_schema = Schema([
     ColumnDefinition('JSON', DataType.JSON),
     ColumnDefinition('JSONB', DataType.JSONB),
 ])
-set_1_row_tuple = (0x1145, 0x1241f2d0, 0x2534a13eb355f7ee, 12.34, "lorem ipsum dolor", "sit amet, consectetur", date(2001, 9, 11), '{"value": 1234}', b'{"value": -4321}')
+set_1_row_tuple = (
+    0x1145,
+    0x1241f2d0,
+    0x2534a13eb355f7ee,
+    12.34,
+    "lorem ipsum dolor",
+    "sit amet, consectetur",
+    date(2001, 9, 11),
+    '{"value": 1234}',
+    b'{"value": -4321}'
+)
 set_1_row_dict = {
     'SMALLINT': 0x1145,
     'INTEGER': 0x1241f2d0,
