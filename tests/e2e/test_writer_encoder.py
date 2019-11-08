@@ -43,8 +43,7 @@ def test_writer_encoder(psycopg_cursor):
 
     assert list(psycopg_cursor) == [
         (1, 2, 3, 1.23, "1", "-1", date(2019, 1, 1), {"value": 1}, {"value": -1}),
-        (10, 20, 30, 12.3, "10", "-10", date(2019, 1, 2), {"value": 10}, {"value": -10}),
-
         (2, 3, 4, 2.34, "2", "-2", date(2019, 2, 1), {"value": 2}, {"value": -2}),
+        (10, 20, 30, 12.3, "10", "-10", date(2019, 1, 2), {"value": 10}, {"value": -10}),
         (20, 30, 40, 23.4, "20", "-20", date(2019, 2, 2), {"value": 20}, {"value": -20}),
     ]
