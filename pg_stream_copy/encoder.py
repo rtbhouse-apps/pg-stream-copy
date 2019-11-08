@@ -97,5 +97,8 @@ _data_type_protocol_build: Dict[DataType, Callable[[Any], bytes]] = {
     DataType.BIGINT: protocol.build_bigint,
     DataType.DOUBLE_PRECISION: protocol.build_double_precision,
     DataType.CHARACTER_VARYING: protocol.build_character_varying,
+    DataType.TEXT: protocol.build_text,
     DataType.DATE: protocol.build_date,
+    DataType.JSON: protocol.build_json,
+    DataType.JSONB: protocol.build_jsonb,
 }
