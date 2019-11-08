@@ -1,6 +1,10 @@
 language: python
 python: "3.8"
 
+branches:
+  only:
+  - master
+
 pytest: &pytest
   stage: test
   services:
