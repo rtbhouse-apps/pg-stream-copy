@@ -4,6 +4,7 @@ python: "3.8"
 branches:
   only:
   - master
+  - /^\d+\.\d+(\.\d+)?(-\S*)?$/  # tags with versions
 
 pytest: &pytest
   stage: test

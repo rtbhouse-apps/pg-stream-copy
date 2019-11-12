@@ -1,4 +1,4 @@
-__version__ = '1.0.6'
+__version__ = '1.1.0'
 
 from .encoder import Encoder
 from .schema import ColumnDefinition, DataType, Schema
