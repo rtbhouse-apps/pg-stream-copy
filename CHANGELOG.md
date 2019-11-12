@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.1.0
+* Add new data types - text, json, jsonb
+
 ## 1.0.3
 * Add README to pypi.org
 * Add LICENCE, CHANGELOG

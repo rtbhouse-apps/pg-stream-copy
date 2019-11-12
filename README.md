@@ -51,4 +51,7 @@ conn.close()
 * bigint
 * double precision
 * character varying
+* text
 * date
+* json
+* jsonb
