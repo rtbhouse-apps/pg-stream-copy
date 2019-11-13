@@ -1,85 +1,57 @@
 language: python
-python: "3.8"
+python: 3.6  # to speed up build
+dist: bionic
+
+services:
+  - docker
 
 branches:
   only:
   - master
   - /^\d+\.\d+(\.\d+)?(-\S*)?$/  # tags with versions
 
-pytest: &pytest
-  stage: test
-  services:
-    - postgresql
-  addons:
-    postgresql: $PG_VERSION
-  before_install:
-    - sudo apt-get update
-    - sudo apt-get --yes remove postgresql\*
-    - sudo apt-get install -y postgresql-${PG_VERSION} postgresql-client-${PG_VERSION}
-    - sudo cp /etc/postgresql/{9.6,$PG_VERSION}/main/pg_hba.conf
-    - sudo service postgresql restart $PG_VERSION
-  install:
-    - pip install .[dev,e2e,ci]
-  before_script:
-    - psql -c 'CREATE DATABASE e2e_db;' -U postgres
-  script: pytest --cov=pg_stream_copy tests/
-
-pytest_pg10: &pytest_pg10
-  stage: test
-  services:
-    - postgresql
-  addons:
-    postgresql: "10"
-    apt:
-      packages:
-      - postgresql-10
-      - postgresql-client-10
-  install:
-    - pip install .[dev,e2e,ci]
-  before_script:
-    - psql -c 'CREATE DATABASE e2e_db;' -U postgres
-  script: pytest --cov=pg_stream_copy tests/
-
-linters: &linters
-  stage: linters
-  install:
-    - pip install .[dev]
-  script: mypy . && pycodestyle .
+cache:
+  pip: true  # for codecov installation
+  directories:
+  - .pip_cache  # for docker pip installation
 
 jobs:
   include:
-    - <<: *pytest_pg10
-      python: "3.7"
-      env: PG_VERSION=10
-    - <<: *pytest_pg10
-      python: "3.8"
-      env: PG_VERSION=10
-    - <<: *pytest
-      python: "3.7"
-      env: PG_VERSION=11
-    - <<: *pytest
-      python: "3.7"
-      env: PG_VERSION=12
-    - <<: *pytest
-      python: "3.8"
-      env: PG_VERSION=11
-    - <<: *pytest
-      python: "3.8"
-      env: PG_VERSION=12
+    - stage: test
+      env:
+        - PG_VERSION=9
+        - PYTHON_VERSION=3.8
+      script: ./bin/tests.sh
+    - stage: test
+      env:
+        - PG_VERSION=10
+        - PYTHON_VERSION=3.8
+      script: ./bin/tests.sh
+    - stage: test
+      env:
+        - PG_VERSION=11
+        - PYTHON_VERSION=3.8
+      script: ./bin/tests.sh
+    - stage: test
+      env:
+        - PG_VERSION=12
+        - PYTHON_VERSION=3.7
+      script: ./bin/tests.sh
+    - stage: test
+      env:
+        - PG_VERSION=12
+        - PYTHON_VERSION=3.8
+      install: pip install codecov
+      script: ./bin/tests.sh
       after_success:
         - codecov
 
-    - <<: *linters
-      python: "3.7"
-    - <<: *linters
-      python: "3.8"
+    - stage: linters
+      script: ./bin/linters.sh
 
     - stage: deploy
-      script: skip
-      deploy:
-        provider: pypi
-        user: __token__
-        password:
-          secure: "avofCVRH1MV01ouo1lxSxHSdPZ++dm2JPg+XFI1LL2FhuKkkN77XODqNj6A1YWX8R24OIkSMP92lEBBPZmRNQRFyEl+dfHfYnVcVf0Kd4pwGl70I4jsIf2gYmCxyBN9i1xj7ptg0RYE3AV+zbo9VqPMn3MTmIQhhhA3lHcujpBFqM6JelszxXRearnQlrwZgUPRv5yZYVpj8L368Yngup2Zas1IyvmB6pMYwcDpA1C0Kd4hL4GSw/ijZdOjXtDaCsGzuLu6DnZfD+jgqDpFKqyNxATsv2MiROnMTQv91UJi3F8weVkNecmlGOz9+TOxkwkiexa/X93XCf8QmUOa5VZG/7rgNMGlgdQVa6Bqf5PcWbKrQlttbKKuGO4zHNqcQEh0lfXVVtTWMT73BZ2bdvVfpYFZEh3GpbrKxKg8qxmis+TTsS4QcgcM7hrWqL9BGtk/D4ReU/U/iW76kJ+/rtS2hlOUbWrckCCY6j4EbnVldQl0LQ2LChPiXE/1nbvQur7Ae2U4fjCSTkSLvfWeorDr5TFKpujNYR+WkMdp8jWq1w1oR1TcFeJMfcGA5mcGx/Lkl4UHEAjnY681CAy24dDEE4i8/6PVtZkhcSY+vhvZ+d53EX1I0wXQBwG05PnDfKb9bBUQcI8yX9Rpm+V4lyKKUFkZXz4HmAak7jHL5xxY="
-        on:
-          tags: true
+      if: tag IS present
+      env:
+        - TWINE_USERNAME=__token__
+        - secure: rP/9tRkRi6sw46ZqWhdXouNpD+LxNa7sQa1O7FepgA59fH2CW0uPfmV4F/JmPiGVujUZJz12U3OR8PFcbNZGa2/0DMVh6X7qIxpiRPlik/v4WRND/f7lZ5XoH0RP+ntkL20rh7LsA1gRrQtLY9gu5yC3LAta1qwAUj2NneIMbsQ1YGZCFGhNEZoR/Tn72kVURTkMbz1a7XmWNE9h3I0Casj9DndWJwLHGv2OqNdVnXj7Go9R3gb8Yodwkt4oMvN5lvB8pFDiUYi3ZZY52ymNcuY7ctwwwHv9UOyNoJSVZzne5mmqT3jwucJfXtcQOEMBwfsbQrUGXVFo9ydUeCL/CFC0D1qRO9/P3zsncIzTHEq4is9bkmPKFEsJfbPk8HP2tbZUIaWRMu32r4lKsjjPC9clWl6SA2/OIMNw3V2Lfecj253QElLDRmLArSYhuQCB0ACLYZ+PyQ6Dt4laV2OJej8a6CP27nhRrWbK0r3jm5+PsKHDx4qMIwHkl9RVg7XmlNA2OX0zWkje01U7BiCsE6req4Mwu/xuy7srpyuRQcPUGuf6HG/croIcH+oT/m+DqbqpTOTu5NgOnoYqkB88AuOmL5HxQiq8HgDw8EJsp1n5h6f2QFLYEg4BxlM9ee85SYmrKotvyvr4qGpdkk+TlwEM7v4uH/zs21cseiWvwGA=
+      script: ./bin/deploy.sh

@@ -55,3 +55,24 @@ conn.close()
 * date
 * json
 * jsonb
+
+
+### Development:
+```bash
+# prepare env
+docker-compose run py bash
+python -m venv venv
+pip install -e .[dev,e2e]
+# run tests
+pytest tests/
+```
+If you need to test different PostgreSQL and Python version, you can use env vars:
+```bash
+PYTHON_VERSION=3.7 PG_VERSION=10 docker-compose build
+PYTHON_VERSION=3.7 PG_VERSION=10 docker-compose run py ...
+```
+or use CI script:
+```bash
+PG_VERSION=11 PYTHON_VERSION=3.7 ./bin/tests.sh
+```
+currently pg_stream_copy is supporting Python 3.7 and 3.8 and PostgreSQL v10, v11, v12
