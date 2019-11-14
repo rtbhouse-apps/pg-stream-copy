@@ -6,6 +6,11 @@
 
 Fast COPY TO postgresql table directly from python by converting input data to bytes and stream to psycopg2 cursor using `COPY <table> FROM STDIN BINARY`
 
+### Benchmark:
+The test with 1 mln rows of different column types on docker environment gave results:
+* ~21.5s for `pg_stream_copy`
+* ~54s for `psycopg2.extras.execute_values`
+
 ### Usage:
 ```python
 from datetime import date
