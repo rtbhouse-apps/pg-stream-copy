@@ -1,7 +1,7 @@
 from datetime import date
 from decimal import Decimal
 from struct import pack
-from typing import Tuple, List
+from typing import List, Tuple, cast
 
 # https://www.postgresql.org/docs/10/sql-copy.html - Binary Format section
 
@@ -81,44 +81,44 @@ def build_numeric(value: Decimal) -> bytes:
     digits = [0] * (-len(digits) % 4) + digits
 
     # Group into 4-element tuples
-    digits = [
-        tuple(digits[index * 4:(index + 1) * 4])
+    digits_groups = [
+        cast(Tuple[int, int, int, int], tuple(digits[index * 4:(index + 1) * 4]))
         for index in range(0, len(digits) // 4)
     ]
 
     # Convert 4-element tuples into
-    def digits_to_pg_digit(digits: Tuple[int, int, int, int]) -> int:
+    def digits_group_to_pg_digit(digits_group: Tuple[int, int, int, int]) -> int:
         pg_digit = 0
-        for exponent, digit in enumerate(reversed(digits)):
+        for exponent, digit in enumerate(reversed(digits_group)):
             pg_digit += digit * 10 ** exponent
         return pg_digit
 
-    digits = [digits_to_pg_digit(digit) for digit in digits]
+    pg_digits = [digits_group_to_pg_digit(digits_group) for digits_group in digits_groups]
 
     # Cut R-zeros, convert each cut zero to +1 exponent
-    def digits_rtrim(digits: List[int]) -> Tuple[List[int], int]:
-        for index, digit in enumerate(reversed(digits)):
-            if digit == 0:
+    def pg_digits_rtrim(pg_digits: List[int]) -> Tuple[List[int], int]:
+        for index, pg_digit in enumerate(reversed(pg_digits)):
+            if pg_digit == 0:
                 continue
 
             if index == 0:
-                return (digits, 0)
+                return (pg_digits, 0)
             else:
-                return (digits[:-index], index)
+                return (pg_digits[:-index], index)
 
-        return ([], len(digits))
+        return ([], len(pg_digits))
 
-    (digits, digits_trimmed) = digits_rtrim(digits)
-    exponent += digits_trimmed
+    (pg_digits, pg_digits_trimmed) = pg_digits_rtrim(pg_digits)
+    exponent += pg_digits_trimmed
 
     # https://www.postgresql.org/message-id/16572.1091489720@sss.pgh.pa.us
     return _build_value(pack(
-        f'>hhHH{len(digits)}H',
-        len(digits),
-        exponent + len(digits) - 1,
+        f'>hhHH{len(pg_digits)}H',
+        len(pg_digits),
+        exponent + len(pg_digits) - 1,
         0x4000 if value_tuple.sign else 0x0000,
         -value_tuple.exponent,
-        *digits
+        *pg_digits
     ))
 
 
