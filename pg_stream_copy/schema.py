@@ -16,6 +16,7 @@ class DataType(Enum):
     INTEGER = auto()  # int
     BIGINT = auto()  # int
     DOUBLE_PRECISION = auto()  # float
+    NUMERIC = auto()  # Decimal
     CHARACTER_VARYING = auto()  # str
     TEXT = auto()  # str
     DATE = auto()  # datetime.date
@@ -82,6 +83,7 @@ _pg_data_type_to_py = {
     'integer': DataType.INTEGER,
     'bigint': DataType.BIGINT,
     'double precision': DataType.DOUBLE_PRECISION,
+    'numeric': DataType.NUMERIC,
     'character varying': DataType.CHARACTER_VARYING,
     'text': DataType.TEXT,
     'date': DataType.DATE,

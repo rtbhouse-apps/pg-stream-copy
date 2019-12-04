@@ -1,4 +1,5 @@
 from datetime import date
+from decimal import Decimal
 
 from pg_stream_copy import ColumnDefinition, DataType, Schema
 
@@ -7,6 +8,7 @@ set_1_schema = Schema([
     ColumnDefinition('INTEGER', DataType.INTEGER),
     ColumnDefinition('BIGINT', DataType.BIGINT),
     ColumnDefinition('DOUBLE_PRECISION', DataType.DOUBLE_PRECISION),
+    ColumnDefinition('NUMERIC', DataType.NUMERIC),
     ColumnDefinition('CHARACTER_VARYING', DataType.CHARACTER_VARYING),
     ColumnDefinition('TEXT', DataType.TEXT),
     ColumnDefinition('DATE', DataType.DATE),
@@ -18,6 +20,7 @@ set_1_row_tuple = (
     0x1241f2d0,
     0x2534a13eb355f7ee,
     12.34,
+    Decimal("-12.34"),
     "lorem ipsum dolor",
     "sit amet, consectetur",
     date(2001, 9, 11),
@@ -29,6 +32,7 @@ set_1_row_dict = {
     'INTEGER': 0x1241f2d0,
     'BIGINT': 0x2534a13eb355f7ee,
     'DOUBLE_PRECISION': 12.34,
+    'NUMERIC': Decimal("-12.34"),
     'CHARACTER_VARYING': "lorem ipsum dolor",
     'TEXT': "sit amet, consectetur",
     'DATE': date(2001, 9, 11),
@@ -36,11 +40,12 @@ set_1_row_dict = {
     'JSONB': b'{"value": -4321}',
 }
 
-set1_row_binary = b'\x00\x09' \
+set1_row_binary = b'\x00\x0A' \
     b'\x00\x00\x00\x02\x11E' \
     b'\x00\x00\x00\x04\x12A\xf2' \
     b'\xd0\x00\x00\x00\x08%4\xa1>\xb3U\xf7\xee' \
     b'\x00\x00\x00\x08@(\xae\x14z\xe1G\xae' \
+    b'\x00\x00\x00\x0c\x00\x02\x00\x00@\x00\x00\x02\x00\x0c\rH' \
     b'\x00\x00\x00\x11lorem ipsum dolor' \
     b'\x00\x00\x00\x15sit amet, consectetur' \
     b'\x00\x00\x00\x04\x00\x00\x02k' \
