@@ -1,5 +1,7 @@
 from datetime import date
+from decimal import Decimal
 from struct import pack
+from typing import Tuple, List
 
 # https://www.postgresql.org/docs/10/sql-copy.html - Binary Format section
 
@@ -54,6 +56,70 @@ def build_bigint(value: int) -> bytes:
 
 def build_double_precision(value: float) -> bytes:
     return _build_value(pack('>d', value))
+
+
+def build_numeric(value: Decimal) -> bytes:
+    value_tuple = value.as_tuple()
+
+    if not isinstance(value_tuple.exponent, int):
+        return _build_value(pack(
+            f'>hhHH',
+            0,
+            0,
+            0xC000,
+            0,
+        ))
+
+    # RPad digits so exponent is dividable 4
+    exponent = value_tuple.exponent
+    digits = list(value_tuple.digits)
+    digits += [0] * (exponent % 4)
+    exponent -= (exponent % 4)
+    exponent //= 4
+
+    # LPad digits, so they are grouped by 4
+    digits = [0] * (-len(digits) % 4) + digits
+
+    # Group into 4-element tuples
+    digits = [
+        tuple(digits[index * 4:(index + 1) * 4])
+        for index in range(0, len(digits) // 4)
+    ]
+
+    # Convert 4-element tuples into
+    def digits_to_pg_digit(digits: Tuple[int, int, int, int]) -> int:
+        pg_digit = 0
+        for exponent, digit in enumerate(reversed(digits)):
+            pg_digit += digit * 10 ** exponent
+        return pg_digit
+
+    digits = [digits_to_pg_digit(digit) for digit in digits]
+
+    # Cut R-zeros, convert each cut zero to +1 exponent
+    def digits_rtrim(digits: List[int]) -> Tuple[List[int], int]:
+        for index, digit in enumerate(reversed(digits)):
+            if digit == 0:
+                continue
+
+            if index == 0:
+                return (digits, 0)
+            else:
+                return (digits[:-index], index)
+
+        return ([], len(digits))
+
+    (digits, digits_trimmed) = digits_rtrim(digits)
+    exponent += digits_trimmed
+
+    # https://www.postgresql.org/message-id/16572.1091489720@sss.pgh.pa.us
+    return _build_value(pack(
+        f'>hhHH{len(digits)}H',
+        len(digits),
+        exponent + len(digits) - 1,
+        0x4000 if value_tuple.sign else 0x0000,
+        -value_tuple.exponent,
+        *digits
+    ))
 
 
 def build_character_varying(value: str) -> bytes:
