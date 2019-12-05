@@ -13,7 +13,7 @@ docker-compose build
 docker-compose run \
   -e TWINE_USERNAME=${TWINE_USERNAME} \
   -e TWINE_PASSWORD=${TWINE_PASSWORD} \
-  dev bash -c "
+  py bash -c "
 python -m venv venv
 pip install twine
 python setup.py sdist
