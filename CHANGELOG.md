@@ -1,17 +1,20 @@
 # Changelog
 
+## 1.2.0
+* Added new data type - numeric
+
 ## 1.1.0
-* Add new data types - text, json, jsonb
+* Added new data types - text, json, jsonb
 
 ## 1.0.3
-* Add README to pypi.org
-* Add LICENCE, CHANGELOG
+* Added README to pypi.org
+* Added LICENCE, CHANGELOG
 
 ## 1.0.2
-* Update pypi token
+* Updated pypi token
 
 ## 1.0.1
-* add Travis CI
+* Added Travis CI
 
 ## 1.0.0
-* initial commit
+* Initial version

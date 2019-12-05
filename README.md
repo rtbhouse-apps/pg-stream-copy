@@ -28,6 +28,7 @@ cursor.execute(f'''
         _integer INTEGER NULL,
         _bigint BIGINT NULL,
         _float DOUBLE PRECISION NULL,
+        _numeric NUMERIC NULL,
         _character_varying CHARACTER VARYING NULL,
         _date DATE NULL
     );
@@ -41,6 +42,7 @@ with WriterEncoder(cursor, table_name, schema) as writer_encoder:
         '_integer': 300,
         '_bigint': 400,
         '_float': 234,
+        '_numeric': Decimal("-12.34")
         '_character_varying': 'bar baz',
         '_date': date(2019, 2, 3),
     })
@@ -55,6 +57,7 @@ conn.close()
 * integer
 * bigint
 * double precision
+* numeric
 * character varying
 * text
 * date
