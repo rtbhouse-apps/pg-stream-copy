@@ -12,6 +12,7 @@ class DataType(Enum):
         bytes for integer) and python data types don't allow to set length, we
         describe schema that is used to remap types to binary forms
     """
+    BOOLEAN = auto()  # boolean
     SMALLINT = auto()  # int
     INTEGER = auto()  # int
     BIGINT = auto()  # int
@@ -79,6 +80,7 @@ class Schema:
 
 
 _pg_data_type_to_py = {
+    'boolean': DataType.BOOLEAN,
     'smallint': DataType.SMALLINT,
     'integer': DataType.INTEGER,
     'bigint': DataType.BIGINT,

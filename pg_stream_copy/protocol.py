@@ -42,6 +42,10 @@ def build_null() -> bytes:
     return pg_null
 
 
+def build_boolean(value: bool) -> bytes:
+    return _build_value(pack('>?', value))
+
+
 def build_smallint(value: int) -> bytes:
     return _build_value(pack('>h', value))
 

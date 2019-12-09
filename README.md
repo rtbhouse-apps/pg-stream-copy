@@ -53,6 +53,7 @@ conn.close()
 ```
 
 ### Supported PostgreSQL types:
+* boolean
 * smallint
 * integer
 * bigint

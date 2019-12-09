@@ -92,6 +92,7 @@ class Encoder:
 
 
 _data_type_protocol_build: Dict[DataType, Callable[[Any], bytes]] = {
+    DataType.BOOLEAN: protocol.build_boolean,
     DataType.SMALLINT: protocol.build_smallint,
     DataType.INTEGER: protocol.build_integer,
     DataType.BIGINT: protocol.build_bigint,

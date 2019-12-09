@@ -4,6 +4,7 @@ from decimal import Decimal
 from pg_stream_copy import ColumnDefinition, DataType, Schema
 
 set_1_schema = Schema([
+    ColumnDefinition('BOOLEAN', DataType.BOOLEAN),
     ColumnDefinition('SMALLINT', DataType.SMALLINT),
     ColumnDefinition('INTEGER', DataType.INTEGER),
     ColumnDefinition('BIGINT', DataType.BIGINT),
@@ -16,6 +17,7 @@ set_1_schema = Schema([
     ColumnDefinition('JSONB', DataType.JSONB),
 ])
 set_1_row_tuple = (
+    False,
     0x1145,
     0x1241f2d0,
     0x2534a13eb355f7ee,
@@ -28,6 +30,7 @@ set_1_row_tuple = (
     b'{"value": -4321}'
 )
 set_1_row_dict = {
+    'BOOLEAN': False,
     'SMALLINT': 0x1145,
     'INTEGER': 0x1241f2d0,
     'BIGINT': 0x2534a13eb355f7ee,
@@ -40,7 +43,8 @@ set_1_row_dict = {
     'JSONB': b'{"value": -4321}',
 }
 
-set1_row_binary = b'\x00\x0a' \
+set1_row_binary = b'\x00\x0b' \
+    b'\x00\x00\x00\x01\x00' \
     b'\x00\x00\x00\x02\x11\x45' \
     b'\x00\x00\x00\x04\x12\x41\xf2' \
     b'\xd0\x00\x00\x00\x08\x25\x34\xa1\x3e\xb3\x55\xf7\xee' \

@@ -6,6 +6,7 @@ from pg_stream_copy import ColumnDefinition, DataType, Schema
 def test_from_table_schema(psycopg_cursor):
     psycopg_cursor.execute('''
         CREATE TABLE public.test_schema_test_from_table_schema_1 (
+            _boolean BOOLEAN NULL,
             _smallint SMALLINT NULL,
             _integer INTEGER NULL,
             _bigint BIGINT NULL,
@@ -25,6 +26,7 @@ def test_from_table_schema(psycopg_cursor):
     )
 
     assert schema == Schema(columns=[
+        ColumnDefinition('_boolean', DataType.BOOLEAN),
         ColumnDefinition('_smallint', DataType.SMALLINT),
         ColumnDefinition('_integer', DataType.INTEGER),
         ColumnDefinition('_bigint', DataType.BIGINT),

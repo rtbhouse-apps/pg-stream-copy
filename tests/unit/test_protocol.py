@@ -13,6 +13,11 @@ def test_row_1():
     assert protocol.build_row_header(6) + protocol.build_row_trailer() == b'\x00\x06'
 
 
+def test_column_boolean():
+    assert protocol.build_boolean(True) == b'\x00\x00\x00\x01\x01'
+    assert protocol.build_boolean(False) == b'\x00\x00\x00\x01\x00'
+
+
 def test_column_smallint():
     assert protocol.build_smallint(1234) == b'\x00\x00\x00\x02\x04\xd2'
 
