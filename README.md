@@ -62,6 +62,8 @@ conn.close()
 * character varying
 * text
 * date
+* timestamp
+* timestamp with time zone
 * json
 * jsonb
 

@@ -21,6 +21,8 @@ class DataType(Enum):
     CHARACTER_VARYING = auto()  # str
     TEXT = auto()  # str
     DATE = auto()  # datetime.date
+    TIMESTAMP = auto()  # datetime.datetime
+    TIMESTAMP_TZ = auto()  # datetime.datetime with timezone
     JSON = auto()  # str, eg. json.dumps({})
     JSONB = auto()  # bytes, eg. bytes(json.dumps({}), 'utf-8')
 
@@ -89,6 +91,8 @@ _pg_data_type_to_py = {
     'character varying': DataType.CHARACTER_VARYING,
     'text': DataType.TEXT,
     'date': DataType.DATE,
+    'timestamp without time zone': DataType.TIMESTAMP,
+    'timestamp with time zone': DataType.TIMESTAMP_TZ,
     'json': DataType.JSON,
     'jsonb': DataType.JSONB,
 }

@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, datetime, timedelta, timezone
 from decimal import Decimal
 
 from pg_stream_copy import ColumnDefinition, DataType, Schema
@@ -13,6 +13,8 @@ set_1_schema = Schema([
     ColumnDefinition('CHARACTER_VARYING', DataType.CHARACTER_VARYING),
     ColumnDefinition('TEXT', DataType.TEXT),
     ColumnDefinition('DATE', DataType.DATE),
+    ColumnDefinition('TIMESTAMP', DataType.TIMESTAMP),
+    ColumnDefinition('TIMESTAMP_TZ', DataType.TIMESTAMP_TZ),
     ColumnDefinition('JSON', DataType.JSON),
     ColumnDefinition('JSONB', DataType.JSONB),
 ])
@@ -26,6 +28,8 @@ set_1_row_tuple = (
     "lorem ipsum dolor",
     "sit amet, consectetur",
     date(2001, 9, 11),
+    datetime(2019, 12, 12, 10, 11, 22, 333444),
+    datetime(2019, 12, 12, 8, 11, 22, 333444, tzinfo=timezone(offset=timedelta(hours=-2))),
     '{"value": 1234}',
     b'{"value": -4321}'
 )
@@ -39,11 +43,13 @@ set_1_row_dict = {
     'CHARACTER_VARYING': "lorem ipsum dolor",
     'TEXT': "sit amet, consectetur",
     'DATE': date(2001, 9, 11),
+    'TIMESTAMP': datetime(2019, 12, 12, 10, 11, 22, 333444),
+    'TIMESTAMP_TZ': datetime(2019, 12, 12, 8, 11, 22, 333444, tzinfo=timezone(offset=timedelta(hours=-2))),
     'JSON': '{"value": 1234}',
     'JSONB': b'{"value": -4321}',
 }
 
-set1_row_binary = b'\x00\x0b' \
+set1_row_binary = b'\x00\x0d' \
     b'\x00\x00\x00\x01\x00' \
     b'\x00\x00\x00\x02\x11\x45' \
     b'\x00\x00\x00\x04\x12\x41\xf2' \
@@ -53,5 +59,7 @@ set1_row_binary = b'\x00\x0b' \
     b'\x00\x00\x00\x11lorem ipsum dolor' \
     b'\x00\x00\x00\x15sit amet, consectetur' \
     b'\x00\x00\x00\x04\x00\x00\x02\x6b' \
+    b'\x00\x00\x00\x08\x00\x02<}\xbc^\xdd\x04' \
+    b'\x00\x00\x00\x08\x00\x02<}\xbc^\xdd\x04' \
     b'\x00\x00\x00\x0F{"value": 1234}' \
     b'\x00\x00\x00\x11\x01{"value": -4321}'

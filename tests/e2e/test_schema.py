@@ -15,6 +15,8 @@ def test_from_table_schema(psycopg_cursor):
             _character_varying CHARACTER VARYING NULL,
             _text TEXT NULL,
             _date DATE NULL,
+            _timestamp timestamp NULL,
+            _timestamp_tz timestamp with time zone NULL,
             _json JSON NULL,
             _jsonb JSONB NULL
         )
@@ -35,6 +37,8 @@ def test_from_table_schema(psycopg_cursor):
         ColumnDefinition('_character_varying', DataType.CHARACTER_VARYING),
         ColumnDefinition('_text', DataType.TEXT),
         ColumnDefinition('_date', DataType.DATE),
+        ColumnDefinition('_timestamp', DataType.TIMESTAMP),
+        ColumnDefinition('_timestamp_tz', DataType.TIMESTAMP_TZ),
         ColumnDefinition('_json', DataType.JSON),
         ColumnDefinition('_jsonb', DataType.JSONB),
     ])
