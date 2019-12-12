@@ -135,6 +135,8 @@ def test_timestamp():
         b'\x00\x00\x00\x08\x00\x02<}\xbc^\xdd\x04'
     assert protocol.build_timestamp(datetime(1990, 12, 12, 10, 11, 22, 333444)) == \
         b'\x00\x00\x00\x08\xff\xfe\xfc+\r:\xdd\x04'
+    assert protocol.build_timestamp(date(2019, 12, 12)) == \
+        b'\x00\x00\x00\x08\x00\x02<u1\xee\xe0\x00'
     assert protocol.build_timestamp(
         datetime(
             2019, 12, 12, 8, 11, 22, 333444,

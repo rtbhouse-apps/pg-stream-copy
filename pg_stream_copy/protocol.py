@@ -2,7 +2,7 @@ from datetime import date, datetime
 from time import mktime
 from decimal import Decimal
 from struct import pack
-from typing import List, Tuple, cast
+from typing import List, Tuple, cast, Union
 
 # https://www.postgresql.org/docs/10/sql-copy.html - Binary Format section
 
@@ -141,7 +141,10 @@ def build_date(day: date) -> bytes:
     return build_integer(days)
 
 
-def build_timestamp(val: datetime):
+def build_timestamp(val: Union[datetime, date]):
+    if not isinstance(val, datetime):
+        val = datetime(val.year, val.month, val.day)
+
     timestamp_ms = int((val.timestamp() - pg_date_epoch_ts) * 1_000_000)
     return _build_value(pack('>q', timestamp_ms))
 
