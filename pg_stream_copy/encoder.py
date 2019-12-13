@@ -102,7 +102,7 @@ _data_type_protocol_build: Dict[DataType, Callable[[Any], bytes]] = {
     DataType.TEXT: protocol.build_text,
     DataType.DATE: protocol.build_date,
     DataType.TIMESTAMP: protocol.build_timestamp,
-    DataType.TIMESTAMP_TZ: protocol.build_timestamp,
+    DataType.TIMESTAMP_TZ: protocol.build_timestamp_tz,
     DataType.JSON: protocol.build_json,
     DataType.JSONB: protocol.build_jsonb,
 }
