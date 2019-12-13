@@ -1,14 +1,14 @@
 from datetime import date, datetime
 from decimal import Decimal
 from struct import pack
-from time import mktime
 from typing import List, Tuple, cast
 
 # https://www.postgresql.org/docs/10/sql-copy.html - Binary Format section
 
 pg_null = pack('>I', 0xFFFFFFFF)
-pg_date_epoch = date(2000, 1, 1)  # https://www.postgresql.org/message-id/d34l6e%24284h%241%40news.hub.org
-pg_date_epoch_ts = int(mktime(pg_date_epoch.timetuple()))
+pg_datetime_epoch = datetime(2000, 1, 1)  # https://www.postgresql.org/message-id/d34l6e%24284h%241%40news.hub.org
+pg_date_epoch = pg_datetime_epoch.date()
+pg_timestamp_epoch = pg_datetime_epoch.timestamp()
 
 
 ################################################################################
@@ -142,7 +142,7 @@ def build_date(day: date) -> bytes:
 
 
 def build_timestamp(value: datetime):
-    timestamp_ms = int((value.timestamp() - pg_date_epoch_ts) * 1_000_000)
+    timestamp_ms = int((value.timestamp() - pg_timestamp_epoch) * 1_000_000)
     return _build_value(pack('>q', timestamp_ms))
 
 
