@@ -18,7 +18,7 @@ def test_exceptions(psycopg_cursor):
     ])
 
     with pytest.raises(Exception):
-        with WriterEncoder(psycopg_cursor, "public.e2e_test_e2e_test_1", schema) as writer_encoder:
+        with WriterEncoder(psycopg_cursor, "public.test_exceptions", schema) as writer_encoder:
             writer_encoder.append_dict({
                 "_column1": 0
             })
