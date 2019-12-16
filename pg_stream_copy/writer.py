@@ -1,6 +1,6 @@
 from os import fdopen, pipe
 from threading import Thread
-from typing import Any
+from typing import Any, List
 
 
 class Writer:
@@ -24,6 +24,7 @@ class Writer:
     _pipe_read: Any
     _pipe_write: Any
     _consumer_thread: Thread
+    _consumer_thread_exceptions: List[Exception]
 
     def __init__(
         self,
@@ -40,6 +41,7 @@ class Writer:
 
         self._consumer_thread = Thread(target=self._consumer_thread_main)
         self._consumer_thread.start()
+        self._consumer_thread_exceptions = []
 
     def close(self):
         exceptions = []
@@ -56,14 +58,17 @@ class Writer:
         except Exception as e:
             exceptions.append(e)
 
+        exceptions.extend(self._consumer_thread_exceptions)
+
         if exceptions:
-            raise Exception('Following exceptions were handled during cleanup: ', exceptions)
+            raise Exception('Following exceptions were handled during Writer cleanup: ', exceptions)
 
     def append(self, data: bytes):
         self._pipe_write.write(data)
 
     def _consumer_thread_main(self):
         exceptions = []
+
         try:
             self._psycopg2_cursor.copy_expert(f"COPY {self._table} FROM STDIN BINARY", self._pipe_read)
         except Exception as e:
@@ -75,8 +80,7 @@ class Writer:
         except Exception as e:
             exceptions.append(e)
 
-        if exceptions:
-            raise Exception('Following exceptions were handled during cleanup: ', exceptions)
+        self._consumer_thread_exceptions.extend(exceptions)
 
     def __enter__(self):
         try:
