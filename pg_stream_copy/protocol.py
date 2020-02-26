@@ -156,6 +156,7 @@ def build_timestamp_tz(value: datetime):
     timestamp_ms = int((value.timestamp() - pg_timestamp_tz_epoch) * 1_000_000)
     return _build_value(pack('>q', timestamp_ms))
 
+
 def build_json(value: str) -> bytes:
     return build_character_varying(value)
 
