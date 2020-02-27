@@ -1,4 +1,4 @@
-from datetime import date, datetime
+from datetime import date, datetime, timezone
 from decimal import Decimal
 from struct import pack
 from typing import List, Tuple, cast
@@ -6,9 +6,9 @@ from typing import List, Tuple, cast
 # https://www.postgresql.org/docs/10/sql-copy.html - Binary Format section
 
 pg_null = pack('>I', 0xFFFFFFFF)
-pg_datetime_epoch = datetime(2000, 1, 1)  # https://www.postgresql.org/message-id/d34l6e%24284h%241%40news.hub.org
-pg_date_epoch = pg_datetime_epoch.date()
-pg_timestamp_epoch = pg_datetime_epoch.timestamp()
+pg_date_epoch = date(2000, 1, 1)
+pg_timestamp_epoch = datetime(2000, 1, 1).timestamp()
+pg_timestamp_tz_epoch = datetime(2000, 1, 1, tzinfo=timezone.utc).timestamp()
 
 
 ################################################################################
@@ -142,12 +142,19 @@ def build_date(day: date) -> bytes:
 
 
 def build_timestamp(value: datetime):
+    if value.tzinfo is not None:
+        raise Exception('datatime with timezone cannot be used for timestamp field')
+
     timestamp_ms = int((value.timestamp() - pg_timestamp_epoch) * 1_000_000)
     return _build_value(pack('>q', timestamp_ms))
 
 
 def build_timestamp_tz(value: datetime):
-    return build_timestamp(value)
+    if value.tzinfo is None:
+        raise Exception('datatime without timezone cannot be used for timestamptz field')
+
+    timestamp_ms = int((value.timestamp() - pg_timestamp_tz_epoch) * 1_000_000)
+    return _build_value(pack('>q', timestamp_ms))
 
 
 def build_json(value: str) -> bytes:

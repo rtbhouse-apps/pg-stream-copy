@@ -21,7 +21,7 @@ class DataType(Enum):
     CHARACTER_VARYING = auto()  # str
     TEXT = auto()  # str
     DATE = auto()  # datetime.date
-    TIMESTAMP = auto()  # datetime.datetime
+    TIMESTAMP = auto()  # datetime.datetime without timezone
     TIMESTAMP_TZ = auto()  # datetime.datetime with timezone
     JSON = auto()  # str, eg. json.dumps({})
     JSONB = auto()  # bytes, eg. bytes(json.dumps({}), 'utf-8')
