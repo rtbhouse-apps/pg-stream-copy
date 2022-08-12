@@ -19,6 +19,7 @@ class Encoder:
         - call append_tuple(...) / append_dict(...) repeatedly
         - call close() to finalize
     """
+
     _schema: Schema
     _writer: Writer
 
@@ -38,36 +39,26 @@ class Encoder:
 
     def append_tuple(self, row: tuple):
         assert len(self._schema.columns) == len(row)
-        self._writer.append(
-            self._build_row(row)
-        )
+        self._writer.append(self._build_row(row))
 
     def append_dict(self, row: dict):
         self.append_tuple(tuple(row[column.name] for column in self._schema.columns))
 
     def _append_table_header(self):
-        self._writer.append(
-            protocol.build_table_header()
-        )
+        self._writer.append(protocol.build_table_header())
 
     def _append_table_trailer(self):
-        self._writer.append(
-            protocol.build_table_trailer()
-        )
+        self._writer.append(protocol.build_table_trailer())
 
-    def _build_row(
-        self,
-        row: tuple
-    ) -> bytes:
-        chunks_row = [
-            self._build_cell(column.data_type, value)
-            for column, value in zip(self._schema.columns, row)
-        ]
-        return b''.join([
-            protocol.build_row_header(len(self._schema.columns)),
-            *chunks_row,
-            protocol.build_row_trailer(),
-        ])
+    def _build_row(self, row: tuple) -> bytes:
+        chunks_row = [self._build_cell(column.data_type, value) for column, value in zip(self._schema.columns, row)]
+        return b"".join(
+            [
+                protocol.build_row_header(len(self._schema.columns)),
+                *chunks_row,
+                protocol.build_row_trailer(),
+            ]
+        )
 
     def _build_cell(
         self,

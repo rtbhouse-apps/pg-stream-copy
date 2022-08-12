@@ -14,6 +14,7 @@ class WriterEncoder:
         call append_* repeatedly
         call close() (or use as context manager)
     """
+
     writer: Writer
     encoder: Encoder
 
@@ -50,7 +51,7 @@ class WriterEncoder:
             exceptions.append(e)
 
         if exceptions:
-            raise Exception('Following exceptions were handled during WriterEncoder cleanup: ', exceptions)
+            raise Exception("Following exceptions were handled during WriterEncoder cleanup: ", exceptions)
 
     def append_tuple(self, row: tuple):
         self.encoder.append_tuple(row)

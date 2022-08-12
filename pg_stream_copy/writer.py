@@ -36,8 +36,8 @@ class Writer:
 
     def open(self):
         _pipe_read, _pipe_write = pipe()
-        self._pipe_read = fdopen(_pipe_read, 'rb')
-        self._pipe_write = fdopen(_pipe_write, 'wb')
+        self._pipe_read = fdopen(_pipe_read, "rb")
+        self._pipe_write = fdopen(_pipe_write, "wb")
 
         self._consumer_thread = Thread(target=self._consumer_thread_main)
         self._consumer_thread.start()
@@ -61,7 +61,7 @@ class Writer:
         exceptions.extend(self._consumer_thread_exceptions)
 
         if exceptions:
-            raise Exception('Following exceptions were handled during Writer cleanup: ', exceptions)
+            raise Exception("Following exceptions were handled during Writer cleanup: ", exceptions)
 
     def append(self, data: bytes):
         self._pipe_write.write(data)

@@ -12,6 +12,7 @@ class DataType(Enum):
         bytes for integer) and python data types don't allow to set length, we
         describe schema that is used to remap types to binary forms
     """
+
     BOOLEAN = auto()  # boolean
     SMALLINT = auto()  # int
     INTEGER = auto()  # int
@@ -37,6 +38,7 @@ class Schema:
     """
     Internal postgres table schema representation
     """
+
     columns: List[ColumnDefinition]
 
     @staticmethod
@@ -50,7 +52,8 @@ class Schema:
         table_schema, table_name = table.split(".")
 
         # Possible need to filter table_catalog
-        psycopg2_cursor.execute('''
+        psycopg2_cursor.execute(
+            """
             SELECT
                 column_name, data_type
             FROM
@@ -60,39 +63,33 @@ class Schema:
                 table_name = %(table_name)s
             ORDER BY
                 ordinal_position
-        ''', {
-            'table_schema': table_schema,
-            'table_name': table_name,
-        })
+        """,
+            {
+                "table_schema": table_schema,
+                "table_name": table_name,
+            },
+        )
 
-        columns = [
-            ColumnDefinition(
-                name=row[0],
-                data_type=_pg_data_type_to_py[row[1]]
-            )
-            for row in psycopg2_cursor
-        ]
+        columns = [ColumnDefinition(name=row[0], data_type=_pg_data_type_to_py[row[1]]) for row in psycopg2_cursor]
 
         if not columns:
             raise Exception("information_schema returned 0 rows for this table. Most likely the table was not found.")
 
-        return Schema(
-            columns=columns
-        )
+        return Schema(columns=columns)
 
 
 _pg_data_type_to_py = {
-    'boolean': DataType.BOOLEAN,
-    'smallint': DataType.SMALLINT,
-    'integer': DataType.INTEGER,
-    'bigint': DataType.BIGINT,
-    'double precision': DataType.DOUBLE_PRECISION,
-    'numeric': DataType.NUMERIC,
-    'character varying': DataType.CHARACTER_VARYING,
-    'text': DataType.TEXT,
-    'date': DataType.DATE,
-    'timestamp without time zone': DataType.TIMESTAMP,
-    'timestamp with time zone': DataType.TIMESTAMP_TZ,
-    'json': DataType.JSON,
-    'jsonb': DataType.JSONB,
+    "boolean": DataType.BOOLEAN,
+    "smallint": DataType.SMALLINT,
+    "integer": DataType.INTEGER,
+    "bigint": DataType.BIGINT,
+    "double precision": DataType.DOUBLE_PRECISION,
+    "numeric": DataType.NUMERIC,
+    "character varying": DataType.CHARACTER_VARYING,
+    "text": DataType.TEXT,
+    "date": DataType.DATE,
+    "timestamp without time zone": DataType.TIMESTAMP,
+    "timestamp with time zone": DataType.TIMESTAMP_TZ,
+    "json": DataType.JSON,
+    "jsonb": DataType.JSONB,
 }
