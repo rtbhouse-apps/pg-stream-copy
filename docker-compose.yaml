@@ -11,13 +11,12 @@ services:
     build:
       context: .
       args:
-        UID: "${UID}"
-        GID: "${UID}"
+        UID: "${UID:-1000}"
+        GID: "${UID:-1000}"
         PYTHON_VERSION: "${PYTHON_VERSION:-3.10}"
     container_name: pg_stream_copy_py
     environment:
       DB_DSN: postgresql://postgres:postgres@db
-      WAIT_HOSTS: db:5432
     depends_on:
       - db
     volumes:
