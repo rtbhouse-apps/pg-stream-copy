@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.6.0
+* Internal fixes, rewrites and updates
+* Switch to pyproject.toml
+* Strictly typed
+
 ## 1.2.0
 * Added new data type - numeric
 
