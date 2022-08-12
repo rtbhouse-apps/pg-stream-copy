@@ -1,5 +1,5 @@
 from types import TracebackType
-from typing import Any, ContextManager, Dict, List, Tuple, Type, Optional
+from typing import Any, ContextManager, Dict, List, Optional, Tuple, Type
 
 from .encoder import Encoder
 from .schema import Schema
