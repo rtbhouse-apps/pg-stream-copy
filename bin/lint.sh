@@ -20,6 +20,6 @@ echo -e "\nRunning mypy..."
 docker compose run --rm --no-deps py poetry run mypy . || exit_code=1
 
 echo -e "\nRunning pylint..."
-docker compose run --rm --no-deps py poetry run pylint rtbhouse_sdk tests || exit_code=1
+docker compose run --rm --no-deps py poetry run pylint pg_stream_copy tests || exit_code=1
 
 exit $exit_code
