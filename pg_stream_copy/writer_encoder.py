@@ -1,5 +1,5 @@
 from types import TracebackType
-from typing import Any, ContextManager, Dict, List, Tuple, Type
+from typing import Any, ContextManager, Dict, List, Tuple, Type, Optional
 
 from .encoder import Encoder
 from .schema import Schema
@@ -73,9 +73,9 @@ class WriterEncoder(ContextManager["WriterEncoder"]):
 
     def __exit__(
         self,
-        __exc_type: Type[BaseException] | None,
-        __exc_value: BaseException | None,
-        __traceback: TracebackType | None,
+        __exc_type: Optional[Type[BaseException]],
+        __exc_value: Optional[BaseException],
+        __traceback: Optional[TracebackType],
     ) -> bool | None:
         self.close()
 
