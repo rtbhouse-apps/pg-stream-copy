@@ -30,6 +30,9 @@ RUN groupadd -g $GID $UNAME \
     && mkdir -p $WORKDIR \
     && chown $UNAME:$UNAME $WORKDIR
 
+ADD https://github.com/ufoscout/docker-compose-wait/releases/download/2.9.0/wait /wait
+RUN chmod +x /wait
+
 USER $UNAME
 WORKDIR $WORKDIR
 
