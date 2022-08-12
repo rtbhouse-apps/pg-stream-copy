@@ -76,7 +76,7 @@ class WriterEncoder(ContextManager["WriterEncoder"]):
         __exc_type: Optional[Type[BaseException]],
         __exc_value: Optional[BaseException],
         __traceback: Optional[TracebackType],
-    ) -> bool | None:
+    ) -> Optional[bool]:
         self.close()
 
         return None

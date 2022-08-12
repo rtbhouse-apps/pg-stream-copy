@@ -1,5 +1,5 @@
 from types import TracebackType
-from typing import Any, Callable, ContextManager, Dict, Tuple, Type, Optional
+from typing import Any, Callable, ContextManager, Dict, Optional, Tuple, Type
 
 from .protocol import (
     build_bigint,
@@ -104,7 +104,7 @@ class Encoder(ContextManager["Encoder"]):
         __exc_type: Optional[Type[BaseException]],
         __exc_value: Optional[BaseException],
         __traceback: Optional[TracebackType],
-    ) -> bool | None:
+    ) -> Optional[bool]:
         self.close()
 
         return None
