@@ -1,10 +1,12 @@
 from datetime import date, datetime, timedelta, timezone
 from decimal import Decimal
 
+from psycopg2._psycopg import cursor  # pylint: disable=no-name-in-module
+
 from pg_stream_copy import Encoder, Schema, Writer, WriterEncoder
 
 
-def test_writer_encoder(psycopg_cursor):
+def test_writer_encoder(psycopg_cursor: cursor) -> None:
     psycopg_cursor.execute(
         """
         CREATE TABLE public.e2e_test_e2e_test_1 (
@@ -114,7 +116,6 @@ def test_writer_encoder(psycopg_cursor):
             _smallint
     """
     )
-    psycopg_cursor = list(psycopg_cursor)
     assert list(psycopg_cursor) == [
         (
             True,

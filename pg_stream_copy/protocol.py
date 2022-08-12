@@ -67,7 +67,7 @@ def build_double_precision(value: float) -> bytes:
 def build_numeric(value: Decimal) -> bytes:
     value_tuple = value.as_tuple()
 
-    if not isinstance(value_tuple.exponent, int):
+    if not isinstance(value_tuple.exponent, int):  # type: ignore
         return _build_value(
             pack(
                 ">hhHH",
@@ -145,7 +145,7 @@ def build_date(day: date) -> bytes:
     return build_integer(days)
 
 
-def build_timestamp(value: datetime):
+def build_timestamp(value: datetime) -> bytes:
     if value.tzinfo is not None:
         raise Exception("datatime with timezone cannot be used for timestamp field")
 
@@ -153,7 +153,7 @@ def build_timestamp(value: datetime):
     return _build_value(pack(">q", timestamp_ms))
 
 
-def build_timestamp_tz(value: datetime):
+def build_timestamp_tz(value: datetime) -> bytes:
     if value.tzinfo is None:
         raise Exception("datatime without timezone cannot be used for timestamptz field")
 

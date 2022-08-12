@@ -1,9 +1,10 @@
 import pytest
+from psycopg2._psycopg import cursor  # pylint: disable=no-name-in-module
 
 from pg_stream_copy import ColumnDefinition, DataType, Schema
 
 
-def test_from_table_schema(psycopg_cursor):
+def test_from_table_schema(psycopg_cursor: cursor) -> None:
     psycopg_cursor.execute(
         """
         CREATE TABLE public.test_schema_test_from_table_schema_1 (
@@ -48,7 +49,7 @@ def test_from_table_schema(psycopg_cursor):
     )
 
 
-def test_from_table_schema_invalid(psycopg_cursor):
+def test_from_table_schema_invalid(psycopg_cursor: cursor) -> None:
     with pytest.raises(Exception):
         Schema.load_from_table(
             psycopg_cursor,

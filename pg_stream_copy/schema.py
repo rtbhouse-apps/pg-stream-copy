@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from dataclasses import dataclass
 from enum import Enum, auto
 from typing import Any, List, NamedTuple
@@ -45,7 +43,7 @@ class Schema:
     def load_from_table(
         psycopg2_cursor: Any,
         table: str,  # Must have table_schema.table_name format
-    ) -> Schema:
+    ) -> "Schema":
         """
         Retrives this schema from given table
         """

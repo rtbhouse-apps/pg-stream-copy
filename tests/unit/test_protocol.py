@@ -4,39 +4,39 @@ from decimal import Decimal
 from pg_stream_copy import protocol
 
 
-def test_table():
+def test_table() -> None:
     assert (
         protocol.build_table_header() + protocol.build_table_trailer()
         == b"PGCOPY\n\xff\r\n\x00\x00\x00\x00\x00\x00\x00\x00\x00\xff\xff"
     )
 
 
-def test_row_1():
+def test_row_1() -> None:
     assert protocol.build_row_header(6) + protocol.build_row_trailer() == b"\x00\x06"
 
 
-def test_column_boolean():
+def test_column_boolean() -> None:
     assert protocol.build_boolean(True) == b"\x00\x00\x00\x01\x01"
     assert protocol.build_boolean(False) == b"\x00\x00\x00\x01\x00"
 
 
-def test_column_smallint():
+def test_column_smallint() -> None:
     assert protocol.build_smallint(1234) == b"\x00\x00\x00\x02\x04\xd2"
 
 
-def test_column_integer():
+def test_column_integer() -> None:
     assert protocol.build_integer(71337) == b"\x00\x00\x00\x04\x00\x01\x16\xa9"
 
 
-def test_column_bigint():
+def test_column_bigint() -> None:
     assert protocol.build_bigint(987654321) == b"\x00\x00\x00\x08\x00\x00\x00\x00\x3a\xde\x68\xb1"
 
 
-def test_column_null():
+def test_column_null() -> None:
     assert protocol.build_null() == b"\xff\xff\xff\xff"
 
 
-def test_column_numeric():
+def test_column_numeric() -> None:
     assert protocol.build_numeric(Decimal("Infinity")) == b"\x00\x00\x00\x08\x00\x00\x00\x00\xc0\x00\x00\x00"
     assert protocol.build_numeric(Decimal("-Infinity")) == b"\x00\x00\x00\x08\x00\x00\x00\x00\xc0\x00\x00\x00"
     assert protocol.build_numeric(Decimal("NaN")) == b"\x00\x00\x00\x08\x00\x00\x00\x00\xc0\x00\x00\x00"
@@ -145,19 +145,19 @@ def test_column_numeric():
     )
 
 
-def test_column_character_varying():
+def test_column_character_varying() -> None:
     assert protocol.build_character_varying("wuteuef") == b"\x00\x00\x00\x07wuteuef"
 
 
-def test_column_text():
+def test_column_text() -> None:
     assert protocol.build_text("lorem ipsum") == b"\x00\x00\x00\x0Blorem ipsum"
 
 
-def test_column_date():
+def test_column_date() -> None:
     assert protocol.build_date(date(2019, 1, 1)) == b"\x00\x00\x00\x04\x00\x00\x1b\x1c"
 
 
-def test_timestamp():
+def test_timestamp() -> None:
     assert (
         protocol.build_timestamp(datetime(2019, 12, 12, 10, 11, 22, 333444))
         == b"\00\x00\x00\x08\x00\x02\x3c\x7d\xbc\x5e\xdd\x04"
@@ -168,7 +168,7 @@ def test_timestamp():
     )
 
 
-def test_timestamp_tz():
+def test_timestamp_tz() -> None:
     assert (
         protocol.build_timestamp_tz(
             datetime(2019, 12, 12, 8, 11, 22, 333444, tzinfo=timezone(offset=timedelta(hours=-2)))
@@ -183,15 +183,15 @@ def test_timestamp_tz():
     )
 
 
-def test_column_json():
+def test_column_json() -> None:
     assert protocol.build_json('{"value": 1234}') == b'\x00\x00\x00\x0F{"value": 1234}'
 
 
-def test_column_jsonb():
+def test_column_jsonb() -> None:
     assert protocol.build_jsonb(b'{"value": -4321}') == b'\x00\x00\x00\x11\x01{"value": -4321}'
 
 
-def test_row_2():
+def test_row_2() -> None:
     assert (
         protocol.build_row_header(10)
         + protocol.build_smallint(1234)

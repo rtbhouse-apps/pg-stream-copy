@@ -1,10 +1,11 @@
 import pytest
+from psycopg2._psycopg import cursor  # pylint: disable=no-name-in-module
 
 from pg_stream_copy import Schema, WriterEncoder
 from pg_stream_copy.schema import ColumnDefinition, DataType
 
 
-def test_exceptions(psycopg_cursor):
+def test_exceptions(psycopg_cursor: cursor) -> None:
     psycopg_cursor.execute(
         """
         CREATE TABLE public.test_exceptions (
