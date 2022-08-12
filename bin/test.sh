@@ -5,4 +5,4 @@ set -o pipefail
 
 cd "`dirname $0`/.."
 
-docker compose run --rm --service-ports py pytest
+docker compose run -it --rm --service-ports py sh -c "/wait && poetry run pytest"
