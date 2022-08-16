@@ -2,17 +2,18 @@ version: "3.2"
 
 services:
   db:
-    image: postgres:${PG_VERSION:-12}-alpine
+    image: postgres:${PG_VERSION:-14}-alpine
     environment:
       POSTGRES_PASSWORD: postgres
 
   py:
+    image: rtbhouse-apps/pg-stream-copy:${DOCKER_TAG:-latest}
     build:
       context: .
       args:
-        UID: "${UID}"
-        GID: "${UID}"
-        PYTHON_VERSION: "${PYTHON_VERSION:-3.8}"
+        UID: "${UID:-1000}"
+        GID: "${UID:-1000}"
+        PYTHON_VERSION: "${PYTHON_VERSION:-3.10}"
     container_name: pg_stream_copy_py
     environment:
       DB_DSN: postgresql://postgres:postgres@db
@@ -20,7 +21,3 @@ services:
       - db
     volumes:
       - ./:/home/python/code
-      - pip_cache:/home/python/.cache/pip
-
-volumes:
-  pip_cache:

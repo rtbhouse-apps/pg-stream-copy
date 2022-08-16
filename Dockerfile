@@ -1,17 +1,42 @@
-ARG PYTHON_VERSION=3.8
-FROM python:${PYTHON_VERSION}
+ARG PYTHON_VERSION=3.10
+FROM python:${PYTHON_VERSION}-slim-buster
 
 ARG UNAME=python
 ARG UID=1000
 ARG GID=1000
-ENV VIRTUAL_ENV=/home/$UNAME/code/venv
-ENV PATH="$VIRTUAL_ENV/bin:$PATH"
+ENV POETRY_HOME=/opt/poetry
+ENV WORKDIR=/home/$UNAME/code
+ENV PATH=$PATH:/home/$UNAME/.local/bin/
 
-RUN groupadd -g $GID -o $UNAME \
-  && useradd -m -u $UID -g $GID -o -s /bin/bash $UNAME
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends curl \
+    && rm -fr /var/lib/apt/lists/*
+
+RUN python -m pip install --upgrade --no-cache-dir pip==22.2.2
+
+# Install Poetry
+RUN export POETRY_VERSION=1.1.14 \
+    && curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python \
+    && chmod a+x ${POETRY_HOME}/bin/poetry \
+    && ln -s ${POETRY_HOME}/bin/poetry /usr/local/bin/poetry \
+    && poetry config virtualenvs.create false \
+    && cp -r ~/.config/ /etc/skel/
+
+RUN groupadd -g $GID $UNAME \
+    && useradd -m -u $UID -g $GID -s /bin/bash $UNAME \
+    && mkdir -p $HOMEDIR/.local/lib/python3.8/site-packages \
+    && mkdir -p $HOMEDIR/.local/bin \
+    && chown -R $UID:$GID $HOMEDIR/.local \
+    && mkdir -p $WORKDIR \
+    && chown $UNAME:$UNAME $WORKDIR
+
+ADD https://github.com/ufoscout/docker-compose-wait/releases/download/2.9.0/wait /wait
+RUN chmod +x /wait
 
 USER $UNAME
-WORKDIR /home/$UNAME/code
+WORKDIR $WORKDIR
 
-RUN mkdir -p /home/$UNAME/.cache/pip
-VOLUME /home/$UNAME/.cache/pip
+COPY --chown=apps ./ $WORKDIR
+RUN poetry install --no-root
+
+CMD ["poetry", "run", "pytest"]

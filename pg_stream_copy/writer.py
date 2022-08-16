@@ -1,9 +1,10 @@
 from os import fdopen, pipe
 from threading import Thread
-from typing import Any, List
+from types import TracebackType
+from typing import Any, BinaryIO, ContextManager, List, Optional, Type
 
 
-class Writer:
+class Writer(ContextManager["Writer"]):
     """
     Provides piped, buffered access to PG COPY binary stream.
     To use:
@@ -21,9 +22,9 @@ class Writer:
     _psycopg2_cursor: Any
     _table: str
 
-    _pipe_read: Any
-    _pipe_write: Any
-    _consumer_thread: Thread
+    _pipe_read: Optional[BinaryIO]
+    _pipe_write: Optional[BinaryIO]
+    _consumer_thread: Optional[Thread]
     _consumer_thread_exceptions: List[Exception]
 
     def __init__(
@@ -31,43 +32,60 @@ class Writer:
         psycopg2_cursor: Any,  # Special care required, see class desc.
         table: str,  # With tablespace
     ):
+        super().__init__()
+
         self._psycopg2_cursor = psycopg2_cursor
         self._table = table
 
-    def open(self):
-        _pipe_read, _pipe_write = pipe()
-        self._pipe_read = fdopen(_pipe_read, 'rb')
-        self._pipe_write = fdopen(_pipe_write, 'wb')
+        self._pipe_read = None
+        self._pipe_write = None
+        self._consumer_thread = None
+        self._consumer_thread_exceptions = []
 
+    def open(self) -> None:
+        assert self._pipe_read is None
+        assert self._pipe_write is None
+        _pipe_read, _pipe_write = pipe()
+        self._pipe_read = fdopen(_pipe_read, "rb")
+        self._pipe_write = fdopen(_pipe_write, "wb")
+
+        assert self._consumer_thread is None
         self._consumer_thread = Thread(target=self._consumer_thread_main)
         self._consumer_thread.start()
         self._consumer_thread_exceptions = []
 
-    def close(self):
-        exceptions = []
+    def close(self) -> None:
+        exceptions: List[Exception] = []
 
         try:
             if self._pipe_write is not None:
                 self._pipe_write.close()
+                self._pipe_write = None
         except Exception as e:
             exceptions.append(e)
 
         try:
             if self._consumer_thread is not None:
                 self._consumer_thread.join()
+                self._consumer_thread = None
         except Exception as e:
             exceptions.append(e)
+
+        # self._pipe_read closed inside thread
 
         exceptions.extend(self._consumer_thread_exceptions)
 
         if exceptions:
-            raise Exception('Following exceptions were handled during Writer cleanup: ', exceptions)
+            raise Exception("Following exceptions were handled during Writer cleanup: ", exceptions)
 
-    def append(self, data: bytes):
+    def append(self, data: bytes) -> None:
+        assert self._pipe_write is not None, "Writer must be opened/entered before appending data"
         self._pipe_write.write(data)
 
-    def _consumer_thread_main(self):
-        exceptions = []
+    def _consumer_thread_main(self) -> None:
+        assert self._pipe_read is not None
+
+        exceptions: List[Exception] = []
 
         try:
             self._psycopg2_cursor.copy_expert(f"COPY {self._table} FROM STDIN BINARY", self._pipe_read)
@@ -77,18 +95,27 @@ class Writer:
         try:
             if self._pipe_read is not None:
                 self._pipe_read.close()
+                self._pipe_read = None
         except Exception as e:
             exceptions.append(e)
 
         self._consumer_thread_exceptions.extend(exceptions)
 
-    def __enter__(self):
+    def __enter__(self) -> "Writer":
         try:
             self.open()
         except Exception as e:
             self.close()
             raise e
+
         return self
 
-    def __exit__(self, exc_type, exc_val, exc_tb):
+    def __exit__(
+        self,
+        __exc_type: Optional[Type[BaseException]],
+        __exc_value: Optional[BaseException],
+        __traceback: Optional[TracebackType],
+    ) -> Optional[bool]:
         self.close()
+
+        return None

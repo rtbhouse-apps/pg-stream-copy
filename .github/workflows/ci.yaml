@@ -1,0 +1,83 @@
+name: CI
+
+on:
+  push:
+  pull_request_target:
+    types: [labeled]
+
+jobs:
+  ci:
+    name: "CI / Python ${{ matrix.python-version }} / PG ${{ matrix.postgres-version }}"
+    runs-on: "ubuntu-22.04"
+    if: >
+      github.event_name == 'push'
+        || contains(github.event.pull_request.labels.*.name, 'pr approved')
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - python-version: "3.10"
+            postgres-version: "10"
+          - python-version: "3.10"
+            postgres-version: "11"
+          - python-version: "3.10"
+            postgres-version: "12"
+          - python-version: "3.10"
+            postgres-version: "13"
+          - python-version: "3.10"
+            postgres-version: "14"
+          - python-version: "3.7"
+            postgres-version: "14"
+          - python-version: "3.8"
+            postgres-version: "14"
+          - python-version: "3.9"
+            postgres-version: "14"
+
+    env:
+      DOCKER_TAG: "${{ github.sha }}"
+      PYTHON_VERSION: "${{ matrix.python-version }}"
+      POETRY_VERSION: "1.1.14"
+      PG_VERSION: "${{ matrix.postgres-version }}"
+
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v3"
+
+      - name: "Get docker image name"
+        id: "get-docker-image-name"
+        run: |
+          DOCKER_IMAGE_NAME=$(yq -e '.services.py.image | split(":").0' docker-compose.yaml)
+          echo "::set-output name=docker-image-name::$DOCKER_IMAGE_NAME"
+
+      - name: "Set docker image metadata"
+        id: "docker-metadata"
+        uses: "docker/metadata-action@v4"
+        with:
+          images: |
+            ${{ steps.get-docker-image-name.outputs.docker-image-name }}
+          tags: |
+            type=raw,value=${{ env.DOCKER_TAG }}
+
+      - name: "Set up Docker Buildx"
+        uses: "docker/setup-buildx-action@v2"
+
+      - name: "Build Docker image"
+        id: build-docker-image
+        uses: "docker/build-push-action@v3"
+        with:
+          build-args: |
+            PYTHON_VERSION=${{ env.PYTHON_VERSION }}
+          push: false
+          load: true
+          tags: "${{ steps.docker-metadata.outputs.tags }}"
+          labels: "${{ steps.docker-metadata.outputs.labels }}"
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: "Lint"
+        run: |
+          ./bin/lint.sh
+
+      - name: "Test"
+        run: |
+          ./bin/test.sh

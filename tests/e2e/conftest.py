@@ -1,12 +1,15 @@
 from os import environ
-import psycopg2
+from typing import Iterator
+
 import pytest
+from psycopg2 import connect  # type: ignore
+from psycopg2._psycopg import cursor  # pylint: disable=no-name-in-module
 
 
 @pytest.fixture
-def psycopg_cursor():
-    db_dsn = environ.get('DB_DSN', 'postgresql://postgres@localhost:5432/e2e_db')
-    psycopg2_connection = psycopg2.connect(db_dsn)
+def psycopg_cursor() -> Iterator[cursor]:
+    db_dsn = environ.get("DB_DSN", "postgresql://postgres@localhost:5432/e2e_db")
+    psycopg2_connection = connect(db_dsn)
     psycopg2_cursor = psycopg2_connection.cursor()
 
     yield psycopg2_cursor

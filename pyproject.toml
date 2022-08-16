@@ -1,0 +1,79 @@
+[tool.poetry]
+name = "pg-stream-copy"
+version = "1.6.0"
+description = "RTB House apps pg_stream_copy"
+authors = ["RTB House Apps Team <apps@rtbhouse.com>"]
+license = "MIT License"
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Natural Language :: English",
+    "License :: OSI Approved :: BSD License",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+]
+
+[tool.poetry.dependencies]
+python = ">=3.7.2, <4.0"
+
+[tool.poetry.dev-dependencies]
+psycopg2-binary = "^2.9.3"
+types-psycopg2 = "^2.9.19"
+
+black = "^22.6.0"
+flake8 = "^5.0.4"
+isort = "^5.10.1"
+mypy = "^0.971"
+
+pylint = "^2.14.5"
+pytest = "^7.1.2"
+pytest-asyncio = "^0.19.0"
+pytest-cov = "^3.0.0"
+pytest-mock = "^3.8.2"
+
+[tool.black]
+line-length = 120
+target-version = ["py37", "py38", "py39", "py310"]
+
+[tool.coverage.run]
+branch = true
+omit = ["*/tests/*"]
+
+[tool.isort]
+profile = "black"
+
+[tool.mypy]
+python_version = "3.10"
+strict = true
+no_warn_unused_ignores = true
+
+
+[tool.pylint.format]
+max-line-length = "120"
+
+[tool.pylint.message_control]
+enable = "all"
+disable = """
+    broad-except,
+    duplicate-code,
+    invalid-name,
+    locally-disabled,
+    missing-class-docstring,
+    missing-function-docstring,
+    missing-module-docstring,
+    no-else-return,
+    suppressed-message,
+    useless-return,
+"""
+extension-pkg-whitelist="pydantic"
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

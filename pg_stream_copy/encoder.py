@@ -1,13 +1,31 @@
-from __future__ import annotations
+from types import TracebackType
+from typing import Any, Callable, ContextManager, Dict, Optional, Tuple, Type
 
-from typing import Any, Callable, Dict
-
-from . import protocol
+from .protocol import (
+    build_bigint,
+    build_boolean,
+    build_character_varying,
+    build_date,
+    build_double_precision,
+    build_integer,
+    build_json,
+    build_jsonb,
+    build_null,
+    build_numeric,
+    build_row_header,
+    build_row_trailer,
+    build_smallint,
+    build_table_header,
+    build_table_trailer,
+    build_text,
+    build_timestamp,
+    build_timestamp_tz,
+)
 from .schema import DataType, Schema
 from .writer import Writer
 
 
-class Encoder:
+class Encoder(ContextManager["Encoder"]):
     """
     Provides access to Writer with row-level access by either tuples or
     dicts. Allows to easily append rows to postgres without taking care of
@@ -19,6 +37,7 @@ class Encoder:
         - call append_tuple(...) / append_dict(...) repeatedly
         - call close() to finalize
     """
+
     _schema: Schema
     _writer: Writer
 
@@ -27,47 +46,39 @@ class Encoder:
         schema: Schema,
         writer: Writer,
     ):
+        super().__init__()
+
         self._schema = schema
         self._writer = writer
 
-    def open(self):
+    def open(self) -> None:
         self._append_table_header()
 
-    def close(self):
+    def close(self) -> None:
         self._append_table_trailer()
 
-    def append_tuple(self, row: tuple):
+    def append_tuple(self, row: Tuple[Any, ...]) -> None:
         assert len(self._schema.columns) == len(row)
-        self._writer.append(
-            self._build_row(row)
-        )
+        self._writer.append(self._build_row(row))
 
-    def append_dict(self, row: dict):
+    def append_dict(self, row: Dict[str, Any]) -> None:
         self.append_tuple(tuple(row[column.name] for column in self._schema.columns))
 
-    def _append_table_header(self):
-        self._writer.append(
-            protocol.build_table_header()
-        )
+    def _append_table_header(self) -> None:
+        self._writer.append(build_table_header())
 
-    def _append_table_trailer(self):
-        self._writer.append(
-            protocol.build_table_trailer()
-        )
+    def _append_table_trailer(self) -> None:
+        self._writer.append(build_table_trailer())
 
-    def _build_row(
-        self,
-        row: tuple
-    ) -> bytes:
-        chunks_row = [
-            self._build_cell(column.data_type, value)
-            for column, value in zip(self._schema.columns, row)
-        ]
-        return b''.join([
-            protocol.build_row_header(len(self._schema.columns)),
-            *chunks_row,
-            protocol.build_row_trailer(),
-        ])
+    def _build_row(self, row: Tuple[Any, ...]) -> bytes:
+        chunks_row = [self._build_cell(column.data_type, value) for column, value in zip(self._schema.columns, row)]
+        return b"".join(
+            [
+                build_row_header(len(self._schema.columns)),
+                *chunks_row,
+                build_row_trailer(),
+            ]
+        )
 
     def _build_cell(
         self,
@@ -75,34 +86,42 @@ class Encoder:
         value: Any,
     ) -> bytes:
         if value is None:
-            return protocol.build_null()
+            return build_null()
 
         return _data_type_protocol_build[data_type](value)
 
-    def __enter__(self):
+    def __enter__(self) -> "Encoder":
         try:
             self.open()
         except Exception as e:
             self.close()
             raise e
+
         return self
 
-    def __exit__(self, exc_type, exc_val, exc_tb):
+    def __exit__(
+        self,
+        __exc_type: Optional[Type[BaseException]],
+        __exc_value: Optional[BaseException],
+        __traceback: Optional[TracebackType],
+    ) -> Optional[bool]:
         self.close()
+
+        return None
 
 
 _data_type_protocol_build: Dict[DataType, Callable[[Any], bytes]] = {
-    DataType.BOOLEAN: protocol.build_boolean,
-    DataType.SMALLINT: protocol.build_smallint,
-    DataType.INTEGER: protocol.build_integer,
-    DataType.BIGINT: protocol.build_bigint,
-    DataType.DOUBLE_PRECISION: protocol.build_double_precision,
-    DataType.NUMERIC: protocol.build_numeric,
-    DataType.CHARACTER_VARYING: protocol.build_character_varying,
-    DataType.TEXT: protocol.build_text,
-    DataType.DATE: protocol.build_date,
-    DataType.TIMESTAMP: protocol.build_timestamp,
-    DataType.TIMESTAMP_TZ: protocol.build_timestamp_tz,
-    DataType.JSON: protocol.build_json,
-    DataType.JSONB: protocol.build_jsonb,
+    DataType.BOOLEAN: build_boolean,
+    DataType.SMALLINT: build_smallint,
+    DataType.INTEGER: build_integer,
+    DataType.BIGINT: build_bigint,
+    DataType.DOUBLE_PRECISION: build_double_precision,
+    DataType.NUMERIC: build_numeric,
+    DataType.CHARACTER_VARYING: build_character_varying,
+    DataType.TEXT: build_text,
+    DataType.DATE: build_date,
+    DataType.TIMESTAMP: build_timestamp,
+    DataType.TIMESTAMP_TZ: build_timestamp_tz,
+    DataType.JSON: build_json,
+    DataType.JSONB: build_jsonb,
 }
