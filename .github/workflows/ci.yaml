@@ -36,7 +36,6 @@ jobs:
     env:
       DOCKER_TAG: "${{ github.sha }}"
       PYTHON_VERSION: "${{ matrix.python-version }}"
-      POETRY_VERSION: "1.1.14"
       PG_VERSION: "${{ matrix.postgres-version }}"
 
     steps:
