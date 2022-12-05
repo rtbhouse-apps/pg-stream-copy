@@ -25,7 +25,7 @@ psycopg2-binary = "^2.9.3"
 types-psycopg2 = "^2.9.19"
 
 black = "^22.6.0"
-flake8 = "^5.0.4"
+flake8 = "^6.0.0"
 isort = "^5.10.1"
 mypy = "^0.991"
 pylint = "^2.14.5"
