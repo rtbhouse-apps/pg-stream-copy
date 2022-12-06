@@ -88,7 +88,6 @@ disable = """
 
 [tool.pytest.ini_options]
 addopts = "--cov=pg_stream_copy/ --cov-report=term"
-asyncio_mode = "auto"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
