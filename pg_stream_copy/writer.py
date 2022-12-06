@@ -1,10 +1,11 @@
+from contextlib import AbstractContextManager
 from os import fdopen, pipe
 from threading import Thread
 from types import TracebackType
-from typing import Any, BinaryIO, ContextManager, List, Optional, Type
+from typing import Any, BinaryIO, List, Optional, Type
 
 
-class Writer(ContextManager["Writer"]):
+class Writer(AbstractContextManager["Writer"]):
     """
     Provides piped, buffered access to PG COPY binary stream.
     To use:

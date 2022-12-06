@@ -1,5 +1,5 @@
+from collections.abc import Iterator
 from os import environ
-from typing import Iterator
 
 import pytest
 from psycopg2 import connect  # type: ignore

@@ -26,11 +26,11 @@ jobs:
             postgres-version: "13"
           - python-version: "3.10"
             postgres-version: "14"
-          - python-version: "3.7"
-            postgres-version: "14"
           - python-version: "3.8"
             postgres-version: "14"
           - python-version: "3.9"
+            postgres-version: "14"
+          - python-version: "3.11"
             postgres-version: "14"
 
     env:
