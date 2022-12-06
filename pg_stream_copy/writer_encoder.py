@@ -1,15 +1,12 @@
-from __future__ import annotations
-
-from contextlib import AbstractContextManager
 from types import TracebackType
-from typing import Any, Dict, List, Optional, Tuple, Type
+from typing import Any, ContextManager, Dict, List, Optional, Tuple, Type
 
 from .encoder import Encoder
 from .schema import Schema
 from .writer import Writer
 
 
-class WriterEncoder(AbstractContextManager["WriterEncoder"]):
+class WriterEncoder(ContextManager["WriterEncoder"]):
     """
     Provides all-in-one access to write functionality
     To use:

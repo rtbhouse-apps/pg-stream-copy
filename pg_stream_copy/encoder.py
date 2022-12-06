@@ -1,9 +1,6 @@
-from __future__ import annotations
-
 from collections.abc import Callable
-from contextlib import AbstractContextManager
 from types import TracebackType
-from typing import Any, Dict, Optional, Tuple, Type
+from typing import Any, ContextManager, Dict, Optional, Tuple, Type
 
 from .protocol import (
     build_bigint,
@@ -29,7 +26,7 @@ from .schema import DataType, Schema
 from .writer import Writer
 
 
-class Encoder(AbstractContextManager["Encoder"]):
+class Encoder(ContextManager["Encoder"]):
     """
     Provides access to Writer with row-level access by either tuples or
     dicts. Allows to easily append rows to postgres without taking care of
