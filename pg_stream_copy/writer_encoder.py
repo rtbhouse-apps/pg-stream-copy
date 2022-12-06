@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from contextlib import AbstractContextManager
 from types import TracebackType
 from typing import Any, Dict, List, Optional, Tuple, Type

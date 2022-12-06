@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from contextlib import AbstractContextManager
 from os import fdopen, pipe
 from threading import Thread
