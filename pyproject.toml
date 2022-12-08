@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pg-stream-copy"
-version = "1.6.0"
+version = "2.0.0"
 description = "RTB House apps pg_stream_copy"
 authors = ["RTB House Apps Team <apps@rtbhouse.com>"]
 license = "MIT License"
@@ -11,21 +11,21 @@ classifiers = [
     "License :: OSI Approved :: BSD License",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.7",
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
 ]
 
 [tool.poetry.dependencies]
-python = ">=3.7.2, <4.0"
+python = ">=3.8.1, <4.0"
 
-[tool.poetry.dev-dependencies]
+[tool.poetry.group.dev.dependencies]
 psycopg2-binary = "^2.9.3"
 types-psycopg2 = "^2.9.19"
 
 black = "^22.6.0"
-flake8 = "^5.0.4"
+flake8 = "^6.0.0"
 isort = "^5.10.1"
 mypy = "^0.991"
 pylint = "^2.14.5"
@@ -36,20 +36,37 @@ pytest-mock = "^3.8.2"
 
 [tool.black]
 line-length = 120
-target-version = ["py37", "py38", "py39", "py310"]
+target-version = ["py38", "py39", "py310", "py311"]
 
 [tool.coverage.run]
 branch = true
 omit = ["*/tests/*"]
 
+[tool.coverage.report]
+show_missing = true
+
 [tool.isort]
 profile = "black"
 
 [tool.mypy]
-python_version = "3.10"
-strict = true
+python_version = "3.8"
 no_warn_unused_ignores = true
+strict = true
 
+[tool.pylint.main]
+py-version = "3.8"
+load-plugins = """
+    pylint.extensions.check_elif,
+    pylint.extensions.confusing_elif,
+    pylint.extensions.consider_ternary_expression,
+    pylint.extensions.empty_comment,
+    pylint.extensions.eq_without_hash,
+    pylint.extensions.for_any_all,
+    pylint.extensions.redefined_loop_name,
+    pylint.extensions.redefined_variable_type,
+    pylint.extensions.set_membership,
+    pylint.extensions.typing,
+"""
 
 [tool.pylint.format]
 max-line-length = "120"
@@ -68,7 +85,9 @@ disable = """
     suppressed-message,
     useless-return,
 """
-extension-pkg-whitelist="pydantic"
+
+[tool.pytest.ini_options]
+addopts = "--cov=pg_stream_copy/ --cov-report=term"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

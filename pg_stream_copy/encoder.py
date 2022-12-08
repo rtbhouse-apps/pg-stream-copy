@@ -1,5 +1,8 @@
+from __future__ import annotations
+
+from collections.abc import Callable
 from types import TracebackType
-from typing import Any, Callable, ContextManager, Dict, Optional, Tuple, Type
+from typing import Any, ContextManager, Dict, Optional, Tuple, Type
 
 from .protocol import (
     build_bigint,

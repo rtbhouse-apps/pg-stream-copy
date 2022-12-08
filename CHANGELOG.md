@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.0.0
+* Dropped support for python 3.7
+* Added support for python 3.11
+
 ## 1.6.0
 * Internal fixes, rewrites and updates
 * Switch to pyproject.toml
