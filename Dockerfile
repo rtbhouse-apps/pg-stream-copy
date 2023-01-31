@@ -33,6 +33,6 @@ USER $UNAME
 WORKDIR $WORKDIR
 
 COPY --chown=apps ./ $WORKDIR
-RUN poetry install --no-root
+RUN poetry install --no-ansi --no-interaction --no-root
 
 CMD ["poetry", "run", "pytest"]
