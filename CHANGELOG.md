@@ -1,5 +1,8 @@
 # Changelog
 
+## 2.0.1
+* Minor linting fixes
+
 ## 2.0.0
 * Dropped support for python 3.7
 * Added support for python 3.11

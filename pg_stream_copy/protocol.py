@@ -67,7 +67,7 @@ def build_double_precision(value: float) -> bytes:
 def build_numeric(value: Decimal) -> bytes:
     value_tuple = value.as_tuple()
 
-    if not isinstance(value_tuple.exponent, int):  # type: ignore
+    if not isinstance(value_tuple.exponent, int):
         return _build_value(
             pack(
                 ">hhHH",

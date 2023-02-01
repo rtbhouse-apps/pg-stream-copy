@@ -61,15 +61,15 @@ class Writer(ContextManager["Writer"]):
             if self._pipe_write is not None:
                 self._pipe_write.close()
                 self._pipe_write = None
-        except Exception as e:
-            exceptions.append(e)
+        except Exception as exc:
+            exceptions.append(exc)
 
         try:
             if self._consumer_thread is not None:
                 self._consumer_thread.join()
                 self._consumer_thread = None
-        except Exception as e:
-            exceptions.append(e)
+        except Exception as exc:
+            exceptions.append(exc)
 
         # self._pipe_read closed inside thread
 
@@ -89,24 +89,24 @@ class Writer(ContextManager["Writer"]):
 
         try:
             self._psycopg2_cursor.copy_expert(f"COPY {self._table} FROM STDIN BINARY", self._pipe_read)
-        except Exception as e:
-            exceptions.append(e)
+        except Exception as exc:
+            exceptions.append(exc)
 
         try:
             if self._pipe_read is not None:
                 self._pipe_read.close()
                 self._pipe_read = None
-        except Exception as e:
-            exceptions.append(e)
+        except Exception as exc:
+            exceptions.append(exc)
 
         self._consumer_thread_exceptions.extend(exceptions)
 
     def __enter__(self) -> "Writer":
         try:
             self.open()
-        except Exception as e:
+        except Exception as exc:
             self.close()
-            raise e
+            raise exc
 
         return self
 
@@ -115,7 +115,5 @@ class Writer(ContextManager["Writer"]):
         __exc_type: Optional[Type[BaseException]],
         __exc_value: Optional[BaseException],
         __traceback: Optional[TracebackType],
-    ) -> Optional[bool]:
+    ) -> None:
         self.close()
-
-        return None

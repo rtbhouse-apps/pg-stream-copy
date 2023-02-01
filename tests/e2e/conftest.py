@@ -4,8 +4,8 @@ from collections.abc import Iterator
 from os import environ
 
 import pytest
-from psycopg2 import connect  # type: ignore
-from psycopg2._psycopg import cursor  # pylint: disable=no-name-in-module
+from psycopg2 import connect
+from psycopg2._psycopg import cursor
 
 
 @pytest.fixture

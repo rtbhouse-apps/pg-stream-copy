@@ -3,7 +3,7 @@ from decimal import Decimal
 
 from pg_stream_copy import ColumnDefinition, DataType, Schema
 
-set_1_schema = Schema(
+SET1_SCHEMA = Schema(
     [
         ColumnDefinition("BOOLEAN", DataType.BOOLEAN),
         ColumnDefinition("SMALLINT", DataType.SMALLINT),
@@ -20,7 +20,7 @@ set_1_schema = Schema(
         ColumnDefinition("JSONB", DataType.JSONB),
     ]
 )
-set_1_row_tuple = (
+SET1_ROW_TUPLE = (
     False,
     0x1145,
     0x1241F2D0,
@@ -35,7 +35,7 @@ set_1_row_tuple = (
     '{"value": 1234}',
     b'{"value": -4321}',
 )
-set_1_row_dict = {
+SET1_ROW_DICT = {
     "BOOLEAN": False,
     "SMALLINT": 0x1145,
     "INTEGER": 0x1241F2D0,
@@ -51,7 +51,7 @@ set_1_row_dict = {
     "JSONB": b'{"value": -4321}',
 }
 
-set1_row_binary = (
+SET1_ROW_BINARY = (
     b"\x00\x0d"
     b"\x00\x00\x00\x01\x00"
     b"\x00\x00\x00\x02\x11\x45"

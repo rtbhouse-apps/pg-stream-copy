@@ -96,9 +96,9 @@ class Encoder(ContextManager["Encoder"]):
     def __enter__(self) -> "Encoder":
         try:
             self.open()
-        except Exception as e:
+        except Exception as exc:
             self.close()
-            raise e
+            raise exc
 
         return self
 
@@ -107,10 +107,8 @@ class Encoder(ContextManager["Encoder"]):
         __exc_type: Optional[Type[BaseException]],
         __exc_value: Optional[BaseException],
         __traceback: Optional[TracebackType],
-    ) -> Optional[bool]:
+    ) -> None:
         self.close()
-
-        return None
 
 
 _data_type_protocol_build: Dict[DataType, Callable[[Any], bytes]] = {
