@@ -1,5 +1,5 @@
 import pytest
-from psycopg2._psycopg import cursor  # pylint: disable=no-name-in-module
+from psycopg2._psycopg import cursor
 
 from pg_stream_copy import ColumnDefinition, DataType, Schema
 

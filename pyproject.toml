@@ -50,7 +50,6 @@ profile = "black"
 
 [tool.mypy]
 python_version = "3.8"
-no_warn_unused_ignores = true
 strict = true
 
 [tool.pylint.main]
@@ -67,6 +66,7 @@ load-plugins = """
     pylint.extensions.set_membership,
     pylint.extensions.typing,
 """
+extension-pkg-whitelist = "psycopg2"
 
 [tool.pylint.format]
 max-line-length = "120"
@@ -76,14 +76,10 @@ enable = "all"
 disable = """
     broad-except,
     duplicate-code,
-    invalid-name,
-    locally-disabled,
     missing-class-docstring,
     missing-function-docstring,
     missing-module-docstring,
     no-else-return,
-    suppressed-message,
-    useless-return,
 """
 
 [tool.pytest.ini_options]

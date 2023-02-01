@@ -45,13 +45,13 @@ class WriterEncoder(ContextManager["WriterEncoder"]):
 
         try:
             self.encoder.close()
-        except Exception as e:
-            exceptions.append(e)
+        except Exception as exc:
+            exceptions.append(exc)
 
         try:
             self.writer.close()
-        except Exception as e:
-            exceptions.append(e)
+        except Exception as exc:
+            exceptions.append(exc)
 
         if exceptions:
             raise Exception("Following exceptions were handled during WriterEncoder cleanup: ", exceptions)
@@ -65,9 +65,9 @@ class WriterEncoder(ContextManager["WriterEncoder"]):
     def __enter__(self) -> "WriterEncoder":
         try:
             self.open()
-        except Exception as e:
+        except Exception as exc:
             self.close()
-            raise e
+            raise exc
 
         return self
 
@@ -76,7 +76,5 @@ class WriterEncoder(ContextManager["WriterEncoder"]):
         __exc_type: Optional[Type[BaseException]],
         __exc_value: Optional[BaseException],
         __traceback: Optional[TracebackType],
-    ) -> Optional[bool]:
+    ) -> None:
         self.close()
-
-        return None

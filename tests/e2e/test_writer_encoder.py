@@ -1,7 +1,7 @@
 from datetime import date, datetime, timedelta, timezone
 from decimal import Decimal
 
-from psycopg2._psycopg import cursor  # pylint: disable=no-name-in-module
+from psycopg2._psycopg import cursor
 
 from pg_stream_copy import Encoder, Schema, Writer, WriterEncoder
 
@@ -31,8 +31,8 @@ def test_writer_encoder(psycopg_cursor: cursor) -> None:
         "public.e2e_test_e2e_test_1",
     )
 
-    dt = datetime(2019, 12, 13, 12, 13, 14, 555666)
-    dt_tz = datetime(2019, 12, 14, 12, 13, 14, 555666, tzinfo=timezone(offset=timedelta(hours=2)))
+    example_dt = datetime(2019, 12, 13, 12, 13, 14, 555666)
+    example_dt_with_tz = datetime(2019, 12, 14, 12, 13, 14, 555666, tzinfo=timezone(offset=timedelta(hours=2)))
     with Writer(psycopg_cursor, "public.e2e_test_e2e_test_1") as writer:
         with Encoder(schema, writer) as encoder:
             encoder.append_tuple(
@@ -46,8 +46,8 @@ def test_writer_encoder(psycopg_cursor: cursor) -> None:
                     "1",
                     "-1",
                     date(2019, 1, 1),
-                    dt + timedelta(days=1),
-                    dt_tz + timedelta(days=1),
+                    example_dt + timedelta(days=1),
+                    example_dt_with_tz + timedelta(days=1),
                     '{"value": 1}',
                     b'{"value": -1}',
                 )
@@ -63,8 +63,8 @@ def test_writer_encoder(psycopg_cursor: cursor) -> None:
                     "10",
                     "-10",
                     date(2019, 1, 2),
-                    dt + timedelta(days=2),
-                    dt_tz + timedelta(days=2),
+                    example_dt + timedelta(days=2),
+                    example_dt_with_tz + timedelta(days=2),
                     '{"value": 10}',
                     b'{"value": -10}',
                 )
@@ -82,8 +82,8 @@ def test_writer_encoder(psycopg_cursor: cursor) -> None:
                 "2",
                 "-2",
                 date(2019, 2, 1),
-                dt + timedelta(days=31),
-                dt_tz + timedelta(days=31),
+                example_dt + timedelta(days=31),
+                example_dt_with_tz + timedelta(days=31),
                 '{"value": 2}',
                 b'{"value": -2}',
             )
@@ -127,8 +127,8 @@ def test_writer_encoder(psycopg_cursor: cursor) -> None:
             "1",
             "-1",
             date(2019, 1, 1),
-            dt + timedelta(days=1),
-            dt_tz + timedelta(days=1),
+            example_dt + timedelta(days=1),
+            example_dt_with_tz + timedelta(days=1),
             {"value": 1},
             {"value": -1},
         ),
@@ -142,8 +142,8 @@ def test_writer_encoder(psycopg_cursor: cursor) -> None:
             "2",
             "-2",
             date(2019, 2, 1),
-            dt + timedelta(days=31),
-            dt_tz + timedelta(days=31),
+            example_dt + timedelta(days=31),
+            example_dt_with_tz + timedelta(days=31),
             {"value": 2},
             {"value": -2},
         ),
@@ -157,8 +157,8 @@ def test_writer_encoder(psycopg_cursor: cursor) -> None:
             "10",
             "-10",
             date(2019, 1, 2),
-            dt + timedelta(days=2),
-            dt_tz + timedelta(days=2),
+            example_dt + timedelta(days=2),
+            example_dt_with_tz + timedelta(days=2),
             {"value": 10},
             {"value": -10},
         ),
