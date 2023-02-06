@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pg-stream-copy"
-version = "2.0.1"
+version = "2.0.2"
 description = "RTB House apps pg_stream_copy"
 authors = ["RTB House Apps Team <apps@rtbhouse.com>"]
 license = "MIT License"
@@ -75,6 +75,7 @@ max-line-length = "120"
 enable = "all"
 disable = """
     broad-except,
+    broad-exception-raised,
     duplicate-code,
     missing-class-docstring,
     missing-function-docstring,
