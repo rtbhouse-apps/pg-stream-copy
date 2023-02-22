@@ -46,7 +46,7 @@ jobs:
         id: "get-docker-image-name"
         run: |
           DOCKER_IMAGE_NAME=$(yq -e '.services.py.image | split(":").0' docker-compose.yaml)
-          echo "::set-output name=docker-image-name::$DOCKER_IMAGE_NAME"
+          echo "docker-image-name=$DOCKER_IMAGE_NAME" >> $GITHUB_OUTPUT
 
       - name: "Set docker image metadata"
         id: "docker-metadata"
