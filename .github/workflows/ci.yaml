@@ -68,7 +68,7 @@ jobs:
 
       - name: "Build Docker image"
         id: build-docker-image
-        uses: "docker/build-push-action@v3"
+        uses: "docker/build-push-action@v4"
         with:
           build-args: |
             PYTHON_VERSION=${{ env.PYTHON_VERSION }}
@@ -80,6 +80,7 @@ jobs:
           labels: "${{ steps.docker-metadata.outputs.labels }}"
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          provenance: false
 
       - name: "Lint"
         run: |
