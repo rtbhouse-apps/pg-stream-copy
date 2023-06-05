@@ -13,7 +13,7 @@ services:
       args:
         UID: "${UID:-1000}"
         GID: "${UID:-1000}"
-        PYTHON_VERSION: "${PYTHON_VERSION:-3.10}"
+        PYTHON_VERSION: "${PYTHON_VERSION:-3.11}"
     container_name: pg_stream_copy_py
     environment:
       DB_DSN: postgresql://postgres:postgres@db
