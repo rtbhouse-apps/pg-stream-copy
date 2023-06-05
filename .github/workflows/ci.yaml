@@ -14,21 +14,21 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - python-version: "3.10"
+          - python-version: "3.11"
             postgres-version: "10"
-          - python-version: "3.10"
+          - python-version: "3.11"
             postgres-version: "11"
-          - python-version: "3.10"
+          - python-version: "3.11"
             postgres-version: "12"
-          - python-version: "3.10"
+          - python-version: "3.11"
             postgres-version: "13"
-          - python-version: "3.10"
+          - python-version: "3.11"
             postgres-version: "14"
           - python-version: "3.8"
             postgres-version: "14"
           - python-version: "3.9"
             postgres-version: "14"
-          - python-version: "3.11"
+          - python-version: "3.10"
             postgres-version: "14"
 
     env:
