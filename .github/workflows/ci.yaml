@@ -38,7 +38,7 @@ jobs:
 
     steps:
       - name: "Checkout"
-        uses: "actions/checkout@v3"
+        uses: "actions/checkout@v4"
 
       - name: "Get docker image name"
         id: "get-docker-image-name"
@@ -48,7 +48,7 @@ jobs:
 
       - name: "Set docker image metadata"
         id: "docker-metadata"
-        uses: "docker/metadata-action@v4"
+        uses: "docker/metadata-action@v5"
         with:
           images: |
             ${{ steps.get-docker-image-name.outputs.docker-image-name }}
@@ -56,7 +56,7 @@ jobs:
             type=raw,value=${{ env.DOCKER_TAG }}
 
       - name: "Set up Docker Buildx"
-        uses: "docker/setup-buildx-action@v2"
+        uses: "docker/setup-buildx-action@v3"
 
       - name: "Add uid and gid env vars"
         id: "set-uid-gid"
@@ -66,7 +66,7 @@ jobs:
 
       - name: "Build Docker image"
         id: build-docker-image
-        uses: "docker/build-push-action@v4"
+        uses: "docker/build-push-action@v5"
         with:
           build-args: |
             PYTHON_VERSION=${{ env.PYTHON_VERSION }}
