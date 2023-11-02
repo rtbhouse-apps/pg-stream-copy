@@ -106,10 +106,10 @@ def build_numeric(value: Decimal) -> bytes:
     # Cut R-zeros, convert each cut zero to +1 exponent
     def pg_digits_rtrim(pg_digits: List[int]) -> Tuple[List[int], int]:
         for index, pg_digit in enumerate(reversed(pg_digits)):
-            if pg_digit == 0:
+            if not pg_digit:
                 continue
 
-            if index == 0:
+            if not index:
                 return (pg_digits, 0)
             else:
                 return (pg_digits[:-index], index)
