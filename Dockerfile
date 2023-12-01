@@ -16,7 +16,7 @@ RUN python -m pip install --upgrade --no-cache-dir pip==23.1.2
 
 # Install Poetry
 ENV POETRY_HOME=/opt/poetry
-RUN curl -sSl https://install.python-poetry.org | python - --version 1.5.1 \
+RUN curl -sSl https://install.python-poetry.org | python - --version 1.7.1 \
     && ln -s ${POETRY_HOME}/bin/poetry /usr/local/bin/poetry
 
 RUN groupadd -g $GID $UNAME \

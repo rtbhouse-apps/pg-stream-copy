@@ -71,7 +71,7 @@ conn.close()
 ### Development:
 ```bash
 # prepare env
-docker-compose run py bash
+docker compose run py bash
 python -m venv venv
 pip install -e .[dev,e2e]
 # run tests
@@ -79,8 +79,8 @@ pytest tests/
 ```
 If you need to test different PostgreSQL and Python version, you can use env vars:
 ```bash
-PYTHON_VERSION=3.10 PG_VERSION=10 docker-compose build
-PYTHON_VERSION=3.10 PG_VERSION=10 docker-compose run py ...
+PYTHON_VERSION=3.10 PG_VERSION=10 docker compose build
+PYTHON_VERSION=3.10 PG_VERSION=10 docker compose run py ...
 ```
 or use CI script:
 ```bash
