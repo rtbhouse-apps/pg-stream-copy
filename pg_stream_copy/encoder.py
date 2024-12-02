@@ -1,8 +1,9 @@
 from __future__ import annotations
 
 from collections.abc import Callable
+from contextlib import AbstractContextManager
 from types import TracebackType
-from typing import Any, ContextManager, Dict, Optional, Tuple, Type
+from typing import Any, Optional
 
 from .protocol import (
     build_bigint,
@@ -28,7 +29,7 @@ from .schema import DataType, Schema
 from .writer import Writer
 
 
-class Encoder(ContextManager["Encoder"]):
+class Encoder(AbstractContextManager["Encoder"]):
     """
     Provides access to Writer with row-level access by either tuples or
     dicts. Allows to easily append rows to postgres without taking care of
@@ -60,11 +61,11 @@ class Encoder(ContextManager["Encoder"]):
     def close(self) -> None:
         self._append_table_trailer()
 
-    def append_tuple(self, row: Tuple[Any, ...]) -> None:
+    def append_tuple(self, row: tuple[Any, ...]) -> None:
         assert len(self._schema.columns) == len(row)
         self._writer.append(self._build_row(row))
 
-    def append_dict(self, row: Dict[str, Any]) -> None:
+    def append_dict(self, row: dict[str, Any]) -> None:
         self.append_tuple(tuple(row[column.name] for column in self._schema.columns))
 
     def _append_table_header(self) -> None:
@@ -73,7 +74,7 @@ class Encoder(ContextManager["Encoder"]):
     def _append_table_trailer(self) -> None:
         self._writer.append(build_table_trailer())
 
-    def _build_row(self, row: Tuple[Any, ...]) -> bytes:
+    def _build_row(self, row: tuple[Any, ...]) -> bytes:
         chunks_row = [self._build_cell(column.data_type, value) for column, value in zip(self._schema.columns, row)]
         return b"".join(
             [
@@ -104,14 +105,14 @@ class Encoder(ContextManager["Encoder"]):
 
     def __exit__(
         self,
-        __exc_type: Optional[Type[BaseException]],
+        __exc_type: Optional[type[BaseException]],
         __exc_value: Optional[BaseException],
         __traceback: Optional[TracebackType],
     ) -> None:
         self.close()
 
 
-_data_type_protocol_build: Dict[DataType, Callable[[Any], bytes]] = {
+_data_type_protocol_build: dict[DataType, Callable[[Any], bytes]] = {
     DataType.BOOLEAN: build_boolean,
     DataType.SMALLINT: build_smallint,
     DataType.INTEGER: build_integer,

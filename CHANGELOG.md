@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.0.0
+* Dropped support for python 3.8
+* Added support for python 3.12, 3.13
+* Added support for postgres v15, v16
+* Minor linting fixes
+
 ## 2.0.2
 * Minor linting fixes
 

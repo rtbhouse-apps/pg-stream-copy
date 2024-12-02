@@ -24,12 +24,19 @@ jobs:
             postgres-version: "13"
           - python-version: "3.11"
             postgres-version: "14"
-          - python-version: "3.8"
-            postgres-version: "14"
+          - python-version: "3.11"
+            postgres-version: "15"
+          - python-version: "3.11"
+            postgres-version: "16"
+
           - python-version: "3.9"
-            postgres-version: "14"
+            postgres-version: "16"
           - python-version: "3.10"
-            postgres-version: "14"
+            postgres-version: "16"
+          - python-version: "3.12"
+            postgres-version: "16"
+          - python-version: "3.13"
+            postgres-version: "16"
 
     env:
       DOCKER_TAG: "${{ github.sha }}"

@@ -1,10 +1,11 @@
+from contextlib import AbstractContextManager
 from os import fdopen, pipe
 from threading import Thread
 from types import TracebackType
-from typing import Any, BinaryIO, ContextManager, List, Optional, Type
+from typing import Any, BinaryIO, Optional
 
 
-class Writer(ContextManager["Writer"]):
+class Writer(AbstractContextManager["Writer"]):
     """
     Provides piped, buffered access to PG COPY binary stream.
     To use:
@@ -25,7 +26,7 @@ class Writer(ContextManager["Writer"]):
     _pipe_read: Optional[BinaryIO]
     _pipe_write: Optional[BinaryIO]
     _consumer_thread: Optional[Thread]
-    _consumer_thread_exceptions: List[Exception]
+    _consumer_thread_exceptions: list[Exception]
 
     def __init__(
         self,
@@ -55,7 +56,7 @@ class Writer(ContextManager["Writer"]):
         self._consumer_thread_exceptions = []
 
     def close(self) -> None:
-        exceptions: List[Exception] = []
+        exceptions: list[Exception] = []
 
         try:
             if self._pipe_write is not None:
@@ -85,7 +86,7 @@ class Writer(ContextManager["Writer"]):
     def _consumer_thread_main(self) -> None:
         assert self._pipe_read is not None
 
-        exceptions: List[Exception] = []
+        exceptions: list[Exception] = []
 
         try:
             self._psycopg2_cursor.copy_expert(f"COPY {self._table} FROM STDIN BINARY", self._pipe_read)
@@ -93,9 +94,8 @@ class Writer(ContextManager["Writer"]):
             exceptions.append(exc)
 
         try:
-            if self._pipe_read is not None:
-                self._pipe_read.close()
-                self._pipe_read = None
+            self._pipe_read.close()
+            self._pipe_read = None
         except Exception as exc:
             exceptions.append(exc)
 
@@ -112,7 +112,7 @@ class Writer(ContextManager["Writer"]):
 
     def __exit__(
         self,
-        __exc_type: Optional[Type[BaseException]],
+        __exc_type: Optional[type[BaseException]],
         __exc_value: Optional[BaseException],
         __traceback: Optional[TracebackType],
     ) -> None:
