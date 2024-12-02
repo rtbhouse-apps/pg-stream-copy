@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from enum import Enum, auto
-from typing import Any, List, NamedTuple
+from typing import Any, NamedTuple
 
 
 class DataType(Enum):
@@ -37,7 +37,7 @@ class Schema:
     Internal postgres table schema representation
     """
 
-    columns: List[ColumnDefinition]
+    columns: list[ColumnDefinition]
 
     @staticmethod
     def load_from_table(

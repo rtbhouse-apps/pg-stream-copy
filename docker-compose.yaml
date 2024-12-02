@@ -2,7 +2,7 @@ version: "3.2"
 
 services:
   db:
-    image: postgres:${PG_VERSION:-14}-alpine
+    image: postgres:${PG_VERSION:-16}-alpine
     environment:
       POSTGRES_PASSWORD: postgres
 

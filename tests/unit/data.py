@@ -1,5 +1,6 @@
 from datetime import date, datetime, timedelta, timezone
 from decimal import Decimal
+from typing import Any
 
 from pg_stream_copy import ColumnDefinition, DataType, Schema
 
@@ -35,7 +36,7 @@ SET1_ROW_TUPLE = (
     '{"value": 1234}',
     b'{"value": -4321}',
 )
-SET1_ROW_DICT = {
+SET1_ROW_DICT: dict[str, Any] = {
     "BOOLEAN": False,
     "SMALLINT": 0x1145,
     "INTEGER": 0x1241F2D0,

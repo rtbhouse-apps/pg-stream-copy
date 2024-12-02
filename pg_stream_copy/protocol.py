@@ -1,7 +1,7 @@
 from datetime import date, datetime, timezone
 from decimal import Decimal
 from struct import pack
-from typing import List, Tuple, cast
+from typing import cast
 
 # https://www.postgresql.org/docs/10/sql-copy.html - Binary Format section
 
@@ -90,12 +90,12 @@ def build_numeric(value: Decimal) -> bytes:
 
     # Group into 4-element tuples
     digits_groups = [
-        cast(Tuple[int, int, int, int], tuple(digits[index * 4 : (index + 1) * 4]))
+        cast(tuple[int, int, int, int], tuple(digits[index * 4 : (index + 1) * 4]))
         for index in range(0, len(digits) // 4)
     ]
 
     # Convert 4-element tuples into
-    def digits_group_to_pg_digit(digits_group: Tuple[int, int, int, int]) -> int:
+    def digits_group_to_pg_digit(digits_group: tuple[int, int, int, int]) -> int:
         pg_digit = 0
         for exponent, digit in enumerate(reversed(digits_group)):
             pg_digit += digit * 10**exponent
@@ -104,7 +104,7 @@ def build_numeric(value: Decimal) -> bytes:
     pg_digits = [digits_group_to_pg_digit(digits_group) for digits_group in digits_groups]
 
     # Cut R-zeros, convert each cut zero to +1 exponent
-    def pg_digits_rtrim(pg_digits: List[int]) -> Tuple[List[int], int]:
+    def pg_digits_rtrim(pg_digits: list[int]) -> tuple[list[int], int]:
         for index, pg_digit in enumerate(reversed(pg_digits)):
             if not pg_digit:
                 continue
