@@ -150,7 +150,7 @@ def test_column_character_varying() -> None:
 
 
 def test_column_text() -> None:
-    assert protocol.build_text("lorem ipsum") == b"\x00\x00\x00\x0Blorem ipsum"
+    assert protocol.build_text("lorem ipsum") == b"\x00\x00\x00\x0blorem ipsum"
 
 
 def test_column_date() -> None:
@@ -184,7 +184,7 @@ def test_timestamp_tz() -> None:
 
 
 def test_column_json() -> None:
-    assert protocol.build_json('{"value": 1234}') == b'\x00\x00\x00\x0F{"value": 1234}'
+    assert protocol.build_json('{"value": 1234}') == b'\x00\x00\x00\x0f{"value": 1234}'
 
 
 def test_column_jsonb() -> None:
@@ -206,7 +206,7 @@ def test_row_2() -> None:
         + protocol.build_json('{"value": 1234}')
         + protocol.build_jsonb(b'{"value": -4321}')
         + protocol.build_row_trailer()
-        == b"\x00\x0A"
+        == b"\x00\x0a"
         b"\x00\x00\x00\x02\x04\xd2"
         b"\x00\x00\x00\x08\x00\x00\x00\x00"
         b"\x3a\xde\x68\xb1\x00\x00\x00\x04\x00\x01\x16\xa9"
@@ -214,8 +214,8 @@ def test_row_2() -> None:
         b"\xff\xff\xff\xff"
         b"\x00\x00\x00\x0c\x00\x02\x00\x00\x40\x00\x00\x02\x00\x0c\x0d\x48"
         b"\x00\x00\x00\x07wuteuef"
-        b"\x00\x00\x00\x0Blorem ipsum"
+        b"\x00\x00\x00\x0blorem ipsum"
         b"\x00\x00\x00\x04\x00\x00\x1b\x1c"
-        b'\x00\x00\x00\x0F{"value": 1234}'
+        b'\x00\x00\x00\x0f{"value": 1234}'
         b'\x00\x00\x00\x11\x01{"value": -4321}'
     )
