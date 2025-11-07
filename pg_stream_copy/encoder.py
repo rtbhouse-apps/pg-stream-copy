@@ -1,9 +1,7 @@
-from __future__ import annotations
-
 from collections.abc import Callable
 from contextlib import AbstractContextManager
 from types import TracebackType
-from typing import Any, Optional
+from typing import Any
 
 from .protocol import (
     build_bigint,
@@ -105,9 +103,9 @@ class Encoder(AbstractContextManager["Encoder"]):
 
     def __exit__(
         self,
-        __exc_type: Optional[type[BaseException]],
-        __exc_value: Optional[BaseException],
-        __traceback: Optional[TracebackType],
+        __exc_type: type[BaseException] | None,
+        __exc_value: BaseException | None,
+        __traceback: TracebackType | None,
     ) -> None:
         self.close()
 
