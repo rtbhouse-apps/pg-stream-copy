@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.0.0
+* Dropped support for python 3.9
+* Minor linting fixes
+
 ## 3.0.0
 * Dropped support for python 3.8
 * Added support for python 3.12, 3.13
