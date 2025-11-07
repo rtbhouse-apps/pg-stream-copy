@@ -1,5 +1,5 @@
 # PG Stream Copy
-[![Build Status](https://travis-ci.com/rtbhouse-apps/pg-stream-copy.svg?branch=master)](https://travis-ci.com/rtbhouse-apps/pg-stream-copy)
+[![CI / CD](https://github.com/rtbhouse-apps/pg-stream-copy/actions/workflows/ci.yaml/badge.svg?branch=master&event=push)](https://github.com/rtbhouse-apps/pg-stream-copy/actions/workflows/ci.yaml)
 [![codecov](https://codecov.io/gh/rtbhouse-apps/pg-stream-copy/branch/master/graph/badge.svg)](https://codecov.io/gh/rtbhouse-apps/pg-stream-copy)
 [![PyPI](https://img.shields.io/pypi/v/pg-stream-copy)](https://pypi.org/project/pg-stream-copy/)
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/pg-stream-copy)](https://pypi.org/project/pg-stream-copy/)
@@ -86,4 +86,4 @@ or use CI script:
 ```bash
 PG_VERSION=11 PYTHON_VERSION=3.10 ./bin/tests.sh
 ```
-currently pg_stream_copy is supporting Python 3.9 to 3.13 and PostgreSQL v10 to v16
+currently pg_stream_copy is supporting Python 3.10 to 3.13 and PostgreSQL v10 to v16

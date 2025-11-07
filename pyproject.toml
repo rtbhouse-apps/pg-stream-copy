@@ -11,7 +11,6 @@ classifiers = [
     "License :: OSI Approved :: BSD License",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
@@ -19,7 +18,7 @@ classifiers = [
 ]
 
 [tool.poetry.dependencies]
-python = ">=3.9, <4.0"
+python = ">=3.10, <4.0"
 
 [tool.poetry.group.dev.dependencies]
 psycopg2-binary = "^2.9.3"
@@ -51,11 +50,10 @@ line_length = 120
 profile = "black"
 
 [tool.mypy]
-python_version = "3.9"
+python_version = "3.13"
 strict = true
 
 [tool.pylint.main]
-py-version = "3.9"
 load-plugins = """
     pylint.extensions.check_elif,
     pylint.extensions.confusing_elif,

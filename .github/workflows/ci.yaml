@@ -29,8 +29,6 @@ jobs:
           - python-version: "3.11"
             postgres-version: "16"
 
-          - python-version: "3.9"
-            postgres-version: "16"
           - python-version: "3.10"
             postgres-version: "16"
           - python-version: "3.12"
