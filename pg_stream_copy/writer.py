@@ -2,7 +2,7 @@ from contextlib import AbstractContextManager
 from os import fdopen, pipe
 from threading import Thread
 from types import TracebackType
-from typing import Any, BinaryIO, Optional
+from typing import Any, BinaryIO
 
 
 class Writer(AbstractContextManager["Writer"]):
@@ -23,9 +23,9 @@ class Writer(AbstractContextManager["Writer"]):
     _psycopg2_cursor: Any
     _table: str
 
-    _pipe_read: Optional[BinaryIO]
-    _pipe_write: Optional[BinaryIO]
-    _consumer_thread: Optional[Thread]
+    _pipe_read: BinaryIO | None
+    _pipe_write: BinaryIO | None
+    _consumer_thread: Thread | None
     _consumer_thread_exceptions: list[Exception]
 
     def __init__(
@@ -112,8 +112,8 @@ class Writer(AbstractContextManager["Writer"]):
 
     def __exit__(
         self,
-        __exc_type: Optional[type[BaseException]],
-        __exc_value: Optional[BaseException],
-        __traceback: Optional[TracebackType],
+        __exc_type: type[BaseException] | None,
+        __exc_value: BaseException | None,
+        __traceback: TracebackType | None,
     ) -> None:
         self.close()
