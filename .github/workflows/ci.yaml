@@ -98,3 +98,75 @@ jobs:
       - name: "Test"
         run: |
           ./bin/test.sh
+
+  release-package:
+    name: "Release package"
+    runs-on: "ubuntu-24.04"
+    needs: ["ci"]
+    env:
+      PYTHON_VERSION: "3.11"
+      POETRY_VERSION: "1.8.5"
+    if: contains('refs/heads/master refs/heads/main', github.ref)
+
+    permissions:
+      contents: "write"
+      id-token: "write"
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: "Setup python ${{ env.PYTHON_VERSION }}"
+        uses: "actions/setup-python@v6"
+        with:
+          python-version: "${{ env.PYTHON_VERSION }}"
+          cache: "pip"
+
+      - name: "Setup poetry ${{ env.POETRY_VERSION }}"
+        run: |
+          curl -sSL https://install.python-poetry.org | POETRY_HOME="$HOME/.poetry" python - --version ${{ env.POETRY_VERSION }} --force
+          echo "$HOME/.poetry/bin" >> $GITHUB_PATH
+
+      - name: Should publish package
+        id: should-publish-package
+        run: |
+          npm install -g semver
+
+          ALL_GIT_TAGS=$(git tag)
+          ALL_RELEASES=$(semver ${ALL_GIT_TAGS})
+          LAST_RELEASE=$(semver ${ALL_GIT_TAGS} | tail -n1)
+
+          # Current version set in pyproject.toml file
+          CURRENT_VERSION=$(semver $(poetry version -s))
+
+          if [[ $ALL_RELEASES == *"${CURRENT_VERSION}"* ]]; then
+              echo "::warning::Package version in pyproject.toml not bumped, will not publish new package"
+              echo "publish=0" >> $GITHUB_OUTPUT
+          else
+              echo "::info::Package will be released. Last release version: ${LAST_RELEASE}, current version: ${CURRENT_VERSION}"
+              echo "publish=1" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Get version
+        id: get-version
+        run: |
+          echo "version=$(poetry version -s)" >> $GITHUB_OUTPUT
+        if: steps.should-publish-package.outputs.publish == 1
+
+      - name: "Build final package"
+        run: |
+          poetry build
+        if: steps.should-publish-package.outputs.publish == 1
+
+      - name: "Publish package to PyPI"
+        uses: pypa/gh-action-pypi-publish@release/v1
+        if: steps.should-publish-package.outputs.publish == 1
+
+      - name: "Create release"
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ steps.get-version.outputs.version }}
+          generate_release_notes: true
+        if: steps.should-publish-package.outputs.publish == 1
