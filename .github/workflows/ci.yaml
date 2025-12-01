@@ -102,7 +102,7 @@ jobs:
     runs-on: "ubuntu-24.04"
     needs: ["ci"]
     env:
-      PYTHON_VERSION: "3.11"
+      PYTHON_VERSION: "3.13"
       POETRY_VERSION: "1.8.5"
     if: contains('refs/heads/master refs/heads/main', github.ref)
 
