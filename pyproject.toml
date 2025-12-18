@@ -30,7 +30,7 @@ isort = "^7.0.0"
 mypy = "^1.0"
 pylint = "^4.0.0"
 
-pytest = "^8.0.0"
+pytest = "^9.0.0"
 pytest-cov = "^7.0.0"
 pytest-mock = "^3.10.0"
 
