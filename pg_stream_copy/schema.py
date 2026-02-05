@@ -52,16 +52,16 @@ class Schema:
         # Possible need to filter table_catalog
         psycopg2_cursor.execute(
             """
-            SELECT
-                column_name, data_type
-            FROM
-                information_schema.columns
-            WHERE
-                table_schema = %(table_schema)s AND
-                table_name = %(table_name)s
-            ORDER BY
-                ordinal_position
-        """,
+                SELECT
+                    column_name, data_type
+                FROM
+                    information_schema.columns
+                WHERE
+                    table_schema = %(table_schema)s AND
+                    table_name = %(table_name)s
+                ORDER BY
+                    ordinal_position
+            """,
             {
                 "table_schema": table_schema,
                 "table_name": table_name,

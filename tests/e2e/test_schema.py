@@ -5,8 +5,7 @@ from pg_stream_copy import ColumnDefinition, DataType, Schema
 
 
 def test_from_table_schema(psycopg_cursor: cursor) -> None:
-    psycopg_cursor.execute(
-        """
+    psycopg_cursor.execute("""
         CREATE TABLE public.test_schema_test_from_table_schema_1 (
             _boolean BOOLEAN NULL,
             _smallint SMALLINT NULL,
@@ -22,8 +21,7 @@ def test_from_table_schema(psycopg_cursor: cursor) -> None:
             _json JSON NULL,
             _jsonb JSONB NULL
         )
-    """
-    )
+    """)
 
     schema = Schema.load_from_table(
         psycopg_cursor,

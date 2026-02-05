@@ -116,7 +116,7 @@ def build_numeric(value: Decimal) -> bytes:
 
         return ([], len(pg_digits))
 
-    (pg_digits, pg_digits_trimmed) = pg_digits_rtrim(pg_digits)
+    pg_digits, pg_digits_trimmed = pg_digits_rtrim(pg_digits)
     exponent += pg_digits_trimmed
 
     # https://www.postgresql.org/message-id/16572.1091489720@sss.pgh.pa.us
