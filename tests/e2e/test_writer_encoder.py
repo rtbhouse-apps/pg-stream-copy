@@ -7,8 +7,7 @@ from pg_stream_copy import Encoder, Schema, Writer, WriterEncoder
 
 
 def test_writer_encoder(psycopg_cursor: cursor) -> None:
-    psycopg_cursor.execute(
-        """
+    psycopg_cursor.execute("""
         CREATE TABLE public.e2e_test_e2e_test_1 (
             _boolean BOOLEAN NULL,
             _smallint SMALLINT NULL,
@@ -24,8 +23,7 @@ def test_writer_encoder(psycopg_cursor: cursor) -> None:
             _json JSON NULL,
             _jsonb JSONB NULL
         );
-    """
-    )
+    """)
     schema = Schema.load_from_table(
         psycopg_cursor,
         "public.e2e_test_e2e_test_1",
@@ -106,16 +104,14 @@ def test_writer_encoder(psycopg_cursor: cursor) -> None:
             )
         )
 
-    psycopg_cursor.execute(
-        """
+    psycopg_cursor.execute("""
         SELECT
             *
         FROM
             public.e2e_test_e2e_test_1
         ORDER BY
             _smallint
-    """
-    )
+    """)
     assert list(psycopg_cursor) == [
         (
             True,

@@ -6,15 +6,13 @@ from pg_stream_copy.schema import ColumnDefinition, DataType
 
 
 def test_exceptions(psycopg_cursor: cursor) -> None:
-    psycopg_cursor.execute(
-        """
+    psycopg_cursor.execute("""
         CREATE TABLE public.test_exceptions (
             _column1 INTEGER NULL,
             _column2 INTEGER NULL,
             _column3 INTEGER NULL
         );
-    """
-    )
+    """)
 
     schema = Schema(
         columns=[
