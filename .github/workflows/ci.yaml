@@ -53,7 +53,7 @@ jobs:
 
       - name: "Set docker image metadata"
         id: "docker-metadata"
-        uses: "docker/metadata-action@v5"
+        uses: "docker/metadata-action@v6"
         with:
           images: |
             ${{ steps.get-docker-image-name.outputs.docker-image-name }}
@@ -61,7 +61,7 @@ jobs:
             type=raw,value=${{ env.DOCKER_TAG }}
 
       - name: "Set up Docker Buildx"
-        uses: "docker/setup-buildx-action@v3"
+        uses: "docker/setup-buildx-action@v4"
         with:
           buildkitd-config-inline: |
             [registry."docker.io"]
@@ -75,7 +75,7 @@ jobs:
 
       - name: "Build Docker image"
         id: build-docker-image
-        uses: "docker/build-push-action@v6"
+        uses: "docker/build-push-action@v7"
         with:
           build-args: |
             PYTHON_VERSION=${{ env.PYTHON_VERSION }}
