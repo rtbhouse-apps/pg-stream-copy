@@ -1,6 +1,5 @@
 # PG Stream Copy
 [![CI / CD](https://github.com/rtbhouse-apps/pg-stream-copy/actions/workflows/ci.yaml/badge.svg?branch=master&event=push)](https://github.com/rtbhouse-apps/pg-stream-copy/actions/workflows/ci.yaml)
-[![codecov](https://codecov.io/gh/rtbhouse-apps/pg-stream-copy/branch/master/graph/badge.svg)](https://codecov.io/gh/rtbhouse-apps/pg-stream-copy)
 [![PyPI](https://img.shields.io/pypi/v/pg-stream-copy)](https://pypi.org/project/pg-stream-copy/)
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/pg-stream-copy)](https://pypi.org/project/pg-stream-copy/)
 
