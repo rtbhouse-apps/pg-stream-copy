@@ -1,8 +1,9 @@
-[tool.poetry]
+[project]
 name = "pg-stream-copy"
 version = "4.0.1"
 description = "RTB House apps pg_stream_copy"
-authors = ["RTB House Apps Team <apps@rtbhouse.com>"]
+authors = [{ name = "RTB House Apps Team", email = "apps@rtbhouse.com" }]
+requires-python = ">=3.10, <4.0"
 license = "MIT License"
 classifiers = [
     "Development Status :: 5 - Production/Stable",
@@ -15,24 +16,29 @@ classifiers = [
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
 ]
 
-[tool.poetry.dependencies]
-python = ">=3.10, <4.0"
+[dependency-groups]
+dev = [
+    "psycopg2-binary>=2.9.3,<3",
+    "types-psycopg2>=2.9.19,<3",
+    "black>=26.0.0,<27",
+    "flake8>=7.0.0,<8",
+    "isort>=9.0.0,<10",
+    "mypy>=2.1,<3",
+    "pylint>=4.0.0,<5",
+    "pytest>=9.0.0,<10",
+    "pytest-cov>=7.0.0,<8",
+    "pytest-mock>=3.10.0,<4",
+]
 
-[tool.poetry.group.dev.dependencies]
-psycopg2-binary = "^2.9.3"
-types-psycopg2 = "^2.9.19"
+[tool.uv]
+default-groups = "all"
 
-black = "^26.0.0"
-flake8 = "^7.0.0"
-isort = "^9.0.0"
-mypy = "^2.1"
-pylint = "^4.0.0"
-
-pytest = "^9.0.0"
-pytest-cov = "^7.0.0"
-pytest-mock = "^3.10.0"
+[build-system]
+requires = ["uv_build>=0.13.5,<0.14.0"]
+build-backend = "uv_build"
 
 [tool.black]
 line-length = 120
@@ -85,7 +91,3 @@ disable = """
 
 [tool.pytest.ini_options]
 addopts = "--cov=pg_stream_copy/ --cov-report=term"
-
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
