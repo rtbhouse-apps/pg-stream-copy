@@ -69,12 +69,10 @@ conn.close()
 
 ### Development:
 ```bash
-# prepare env
-docker compose run py bash
-python -m venv venv
-pip install -e .[dev,e2e]
+# prepare env (dependencies are installed with uv inside the image)
+docker compose build
 # run tests
-pytest tests/
+./bin/test.sh
 ```
 If you need to test different PostgreSQL and Python version, you can use env vars:
 ```bash
@@ -83,6 +81,6 @@ PYTHON_VERSION=3.10 PG_VERSION=10 docker compose run py ...
 ```
 or use CI script:
 ```bash
-PG_VERSION=11 PYTHON_VERSION=3.10 ./bin/tests.sh
+PG_VERSION=11 PYTHON_VERSION=3.10 ./bin/test.sh
 ```
 currently pg_stream_copy is supporting Python 3.10 to 3.13 and PostgreSQL v10 to v16
