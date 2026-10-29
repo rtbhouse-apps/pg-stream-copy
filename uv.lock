@@ -605,7 +605,7 @@ wheels = [
 
 [[package]]
 name = "pg-stream-copy"
-version = "4.0.1"
+version = "4.0.2"
 source = { editable = "." }
 
 [package.dev-dependencies]

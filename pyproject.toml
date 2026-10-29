@@ -1,6 +1,6 @@
 [project]
 name = "pg-stream-copy"
-version = "4.0.1"
+version = "4.0.2"
 description = "RTB House apps pg_stream_copy"
 authors = [{ name = "RTB House Apps Team", email = "apps@rtbhouse.com" }]
 requires-python = ">=3.10, <4.0"
