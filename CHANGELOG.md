@@ -1,5 +1,8 @@
 # Changelog
 
+## 4.0.2
+* Migrated build tooling from Poetry to uv; package metadata now declares the MIT licence consistently
+
 ## 4.0.0
 * Dropped support for python 3.9
 * Minor linting fixes

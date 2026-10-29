@@ -104,7 +104,7 @@ jobs:
     needs: ["ci"]
     env:
       PYTHON_VERSION: "3.13"
-      POETRY_VERSION: "1.8.5"
+      UV_VERSION: "0.13.5"
     if: contains('refs/heads/master refs/heads/main', github.ref)
 
     permissions:
@@ -117,16 +117,11 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: "Setup python ${{ env.PYTHON_VERSION }}"
-        uses: "actions/setup-python@v7"
+      - name: "Setup uv ${{ env.UV_VERSION }}"
+        uses: "astral-sh/setup-uv@v10.2.0"
         with:
+          version: "${{ env.UV_VERSION }}"
           python-version: "${{ env.PYTHON_VERSION }}"
-          cache: "pip"
-
-      - name: "Setup poetry ${{ env.POETRY_VERSION }}"
-        run: |
-          curl -sSL https://install.python-poetry.org | POETRY_HOME="$HOME/.poetry" python - --version ${{ env.POETRY_VERSION }} --force
-          echo "$HOME/.poetry/bin" >> $GITHUB_PATH
 
       - name: Should publish package
         id: should-publish-package
@@ -138,7 +133,7 @@ jobs:
           LAST_RELEASE=$(semver ${ALL_GIT_TAGS} | tail -n1)
 
           # Current version set in pyproject.toml file
-          CURRENT_VERSION=$(semver $(poetry version -s))
+          CURRENT_VERSION=$(semver $(uv version --short))
 
           if [[ $ALL_RELEASES == *"${CURRENT_VERSION}"* ]]; then
               echo "::warning::Package version in pyproject.toml not bumped, will not publish new package"
@@ -151,12 +146,12 @@ jobs:
       - name: Get version
         id: get-version
         run: |
-          echo "version=$(poetry version -s)" >> $GITHUB_OUTPUT
+          echo "version=$(uv version --short)" >> $GITHUB_OUTPUT
         if: steps.should-publish-package.outputs.publish == 1
 
       - name: "Build final package"
         run: |
-          poetry build
+          uv build
         if: steps.should-publish-package.outputs.publish == 1
 
       - name: "Publish package to PyPI"
