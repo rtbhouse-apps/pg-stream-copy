@@ -118,7 +118,7 @@ jobs:
           fetch-depth: 0
 
       - name: "Setup uv ${{ env.UV_VERSION }}"
-        uses: "astral-sh/setup-uv@v10.2.0"
+        uses: "astral-sh/setup-uv@v10.3.2"
         with:
           version: "${{ env.UV_VERSION }}"
           python-version: "${{ env.PYTHON_VERSION }}"
